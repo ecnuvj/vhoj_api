@@ -5,7 +5,7 @@ type SubmitCodeRequest struct {
 	ProblemId  uint   `form:"problem_id" json:"problem_id" binding:"required"`
 	ContestId  uint   `form:"contest_id" json:"contest_id"`
 	SourceCode string `form:"source_code" json:"source_code" binding:"required"`
-	Language   uint   `form:"language" json:"language" binding:"required"`
+	Language   int32  `form:"language" json:"language" binding:"required"`
 }
 
 type SubmitCodeResponse struct {
