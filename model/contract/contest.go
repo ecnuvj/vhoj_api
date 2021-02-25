@@ -1,0 +1,87 @@
+package contract
+
+import (
+	"github.com/ecnuvj/vhoj_api/model/entity"
+	"time"
+)
+
+type CreateContestRequest struct {
+	Title       string    `json:"title" form:"title" binding:"required"`
+	Description string    `json:"description" form:"description"`
+	StartTime   time.Time `json:"start_time" form:"start_time" binding:"required"`
+	EndTime     time.Time `json:"end_time" form:"end_time" binding:"required"`
+	ProblemIds  []uint    `json:"problem_ids" form:"problem_ids"`
+}
+
+type CreateContestResponse struct {
+	BaseResponse *BaseResponse `json:"base_response"`
+}
+
+type ListContestsRequest struct {
+	PageNo   int32 `json:"page_no" form:"page_no" binding:"required"`
+	PageSize int32 `json:"page_size" form:"page_size" binding:"required"`
+}
+
+type ListContestsResponse struct {
+	BaseResponse *BaseResponse     `json:"base_response"`
+	Contests     []*entity.Contest `json:"contests"`
+}
+
+type JoinContestRequest struct {
+	UserId    uint `json:"user_id" form:"user_id" binding:"required"`
+	ContestId uint `json:"contest_id" form:"contest_id" binding:"required"`
+}
+
+type JoinContestResponse struct {
+	BaseResponse *BaseResponse `json:"base_response"`
+}
+
+type ShowContestRequest struct {
+	ContestId uint `json:"contest_id" form:"contest_id" binding:"required"`
+}
+
+type ShowContestResponse struct {
+	Contest      *entity.Contest `json:"contest"`
+	BaseResponse *BaseResponse   `json:"base_response"`
+}
+
+type UpdateContestRequest struct {
+	ContestId   uint      `json:"contest_id" form:"contest_id" binding:"required"`
+	Title       string    `json:"title" form:"title"`
+	Description string    `json:"description" form:"description"`
+	StartTime   time.Time `json:"start_time" form:"start_time" `
+	EndTime     time.Time `json:"end_time" form:"end_time"`
+	ProblemIds  []uint    `json:"problem_ids" form:"problem_ids"`
+}
+
+type UpdateContestResponse struct {
+	BaseResponse *BaseResponse `json:"base_response"`
+}
+
+type AddContestAdminRequest struct {
+	ContestId uint `json:"contest_id" form:"contest_id" binding:"required"`
+	UserId    uint `json:"user_id" form:"user_id" binding:"required"`
+}
+
+type AddContestAdminResponse struct {
+	BaseResponse *BaseResponse `json:"base_response"`
+}
+
+type GenerateParticipantsRequest struct {
+	ContestId     uint  `json:"contest_id" form:"contest_id" binding:"required"`
+	GenerateCount int32 `json:"generate_count" form:"generate_count" binding:"required"`
+}
+
+type GenerateParticipantsResponse struct {
+	Users        []*entity.User `json:"users"`
+	BaseResponse *BaseResponse  `json:"base_response"`
+}
+
+type ContestRankRequest struct {
+	ContestId uint `json:"contest_id" form:"contest_id" binding:"required"`
+}
+
+type ContestRankResponse struct {
+	Rank         *entity.Rank  `json:"rank"`
+	BaseResponse *BaseResponse `json:"base_response"`
+}
