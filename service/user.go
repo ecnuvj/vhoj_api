@@ -13,9 +13,13 @@ import (
 type IUserService interface {
 	Login(string, string) (*entity.User, error)
 	Register(*entity.User) (*entity.User, error)
-	UpdateUserInfo(*entity.User) (*entity.User, error)
+	UpdateUserInfo(uint, *entity.User) (*entity.User, error)
 	AuthUser(uint, []*entity.Role) (*entity.User, error)
+	ListUsers(int32, int32) ([]*entity.User, *entity.Page, error)
+	DeleteUser(uint) error
 }
+
+var UserService IUserService = &UserServiceImpl{}
 
 type UserServiceImpl struct{}
 
@@ -48,15 +52,70 @@ func (u *UserServiceImpl) Register(user *entity.User) (*entity.User, error) {
 		return nil, err
 	}
 	if resp.BaseResponse.Status != base.REPLY_STATUS_SUCCESS {
-		return nil, fmt.Errorf("resp error: %v", err)
+		return nil, fmt.Errorf("resp error: %v", resp.BaseResponse.Message)
 	}
 	return adapter.RpcUserToEntityUser(resp.User), nil
 }
 
-func (u *UserServiceImpl) UpdateUserInfo(user *entity.User) (*entity.User, error) {
-	request := &userpb
+//user id must have
+func (u *UserServiceImpl) UpdateUserInfo(userId uint, user *entity.User) (*entity.User, error) {
+	request := &userpb.UpdateUserInfoRequest{
+		UserId: uint64(userId),
+		User:   adapter.EntityUserToRpcUser(user),
+	}
+	resp, err := rpc_user.UserServiceClient.UpdateUserInfo(context.Background(), request)
+	if err != nil {
+		return nil, err
+	}
+	if resp.BaseResponse.Status != base.REPLY_STATUS_SUCCESS {
+		return nil, fmt.Errorf("resp error: %v", resp.BaseResponse.Message)
+	}
+	return adapter.RpcUserToEntityUser(resp.User), nil
 }
 
-func (u *UserServiceImpl) AuthUser(u2 uint, roles []*entity.Role) (*entity.User, error) {
-	panic("implement me")
+func (u *UserServiceImpl) AuthUser(userId uint, roles []*entity.Role) (*entity.User, error) {
+	request := &userpb.UpdateUserRolesRequest{
+		Roles:  adapter.EntityRolesToRpcRoles(roles),
+		UserId: uint64(userId),
+	}
+	resp, err := rpc_user.UserServiceClient.UpdateUserRoles(context.Background(), request)
+	if err != nil {
+		return nil, err
+	}
+	if resp.BaseResponse.Status != base.REPLY_STATUS_SUCCESS {
+		return nil, fmt.Errorf("resp error: %v", resp.BaseResponse.Message)
+	}
+	return adapter.RpcUserToEntityUser(resp.User), nil
+}
+
+func (u *UserServiceImpl) ListUsers(pageNo int32, pageSize int32) ([]*entity.User, *entity.Page, error) {
+	request := &userpb.GetAllUsersRequest{
+		PageNo:   pageNo,
+		PageSize: pageSize,
+	}
+	resp, err := rpc_user.UserServiceClient.GetAllUsers(context.Background(), request)
+	if err != nil {
+		return nil, nil, err
+	}
+	if resp.BaseResponse.Status != base.REPLY_STATUS_SUCCESS {
+		return nil, nil, fmt.Errorf("resp error: %v", resp.BaseResponse.Message)
+	}
+	return adapter.RpcUsersToEntityUsers(resp.Users), &entity.Page{
+		TotalCount: resp.TotalCount,
+		TotalPages: resp.TotalPages,
+	}, nil
+}
+
+func (u *UserServiceImpl) DeleteUser(userId uint) error {
+	request := &userpb.DeleteUsersRequest{
+		UserIds: []uint64{uint64(userId)},
+	}
+	resp, err := rpc_user.UserServiceClient.DeleteUsers(context.Background(), request)
+	if err != nil {
+		return err
+	}
+	if resp.BaseResponse.Status != base.REPLY_STATUS_SUCCESS {
+		return fmt.Errorf("resp error: %v", resp.BaseResponse.Message)
+	}
+	return nil
 }

@@ -9,15 +9,17 @@ type ListUsersRequest struct {
 
 type ListUsersResponse struct {
 	Users        []*entity.User `json:"users"`
+	PageInfo     *entity.Page   `json:"page_info"`
 	BaseResponse *BaseResponse  `json:"base_response"`
 }
 
 type AuthUserRequest struct {
-	UserId uint `json:"user_id" form:"user_id" binding:"required"`
-	RoleId uint `json:"role_id" form:"role_id" binding:"required"`
+	UserId uint           `json:"user_id" form:"user_id" binding:"required"`
+	Roles  []*entity.Role `json:"roles" form:"roles" binding:"required"`
 }
 
 type AuthUserResponse struct {
+	User         *entity.User  `json:"user"`
 	BaseResponse *BaseResponse `json:"base_response"`
 }
 
@@ -49,7 +51,7 @@ type RegisterResponse struct {
 }
 
 type UpdateUserInfoRequest struct {
-	UserId uint         `json:"user_id" form:"user_Id" binding:"required"`
+	UserId uint         `json:"user_id" form:"user_id" binding:"required"`
 	User   *entity.User `json:"user" form:"user" binding:"required"`
 }
 
