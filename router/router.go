@@ -25,6 +25,7 @@ func Init() {
 		problem.GET("/list", handler.ListProblems)
 		problem.GET("/show", handler.ShowProblem)
 		problem.POST("/submit", handler.SubmitCode)
+		problem.POST("/search", handler.SearchProblem)
 	}
 
 	if err := router.Run(":8080"); err != nil {

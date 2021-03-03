@@ -59,7 +59,7 @@ func SearchProblem(c *gin.Context) {
 		})
 		return
 	}
-	problems, err := service.ProblemService.SearchProblem(request.PageNo, request.PageSize, request.SearchCondition)
+	problems, pageInfo, err := service.ProblemService.SearchProblem(request.PageNo, request.PageSize, request.SearchCondition)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, &contract.SearchProblemResponse{
 			BaseResponse: util.NewFailureResponse("service error: %v", err),
@@ -68,6 +68,7 @@ func SearchProblem(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, &contract.SearchProblemResponse{
 		BaseResponse: util.NewSuccessResponse("success"),
+		PageInfo:     pageInfo,
 		Problems:     problems,
 	})
 }
