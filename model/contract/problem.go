@@ -13,7 +13,7 @@ type ListProblemsRequest struct {
 type ListProblemsResponse struct {
 	BaseResponse *BaseResponse     `json:"base_response"`
 	Problems     []*entity.Problem `json:"problems"`
-	Page         *entity.Page      `json:"page"`
+	PageInfo     *entity.Page      `json:"page_info"`
 }
 
 type ShowProblemRequest struct {
@@ -26,13 +26,15 @@ type ShowProblemResponse struct {
 }
 
 type SearchProblemRequest struct {
-	ProblemId uint   `json:"problem_id" form:"problem_id"`
-	Title     string `json:"title" form:"title"`
+	SearchCondition *entity.SearchCondition `json:"search_condition" form:"search_condition" binding:"required"`
+	PageNo          int32                   `json:"page_no" form:"page_no" binding:"required"`
+	PageSize        int32                   `json:"page_size" form:"page_size" binding:"required"`
 }
 
 type SearchProblemResponse struct {
 	BaseResponse *BaseResponse     `json:"base_response"`
 	Problems     []*entity.Problem `json:"problems"`
+	PageInfo     *entity.Page      `json:"page_info"`
 }
 
 type CheckUserProblemStatusRequest struct {

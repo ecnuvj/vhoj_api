@@ -8,7 +8,6 @@ import (
 
 func Init() {
 	router := gin.Default()
-	router.POST("/problem/submit", handler.SubmitCode)
 
 	user := router.Group("/user")
 	{
@@ -19,6 +18,13 @@ func Init() {
 		user.POST("/auth", handler.AuthUser)
 		user.GET("/list", handler.ListUsers)
 		user.DELETE("/delete", handler.DeleteUser)
+	}
+
+	problem := router.Group("/problem")
+	{
+		problem.GET("/list", handler.ListProblems)
+		problem.GET("/show", handler.ShowProblem)
+		problem.POST("/submit", handler.SubmitCode)
 	}
 
 	if err := router.Run(":8080"); err != nil {
