@@ -26,9 +26,9 @@ type ShowProblemResponse struct {
 }
 
 type SearchProblemRequest struct {
-	SearchCondition *entity.SearchCondition `json:"search_condition" form:"search_condition" binding:"required"`
-	PageNo          int32                   `json:"page_no" form:"page_no" binding:"required"`
-	PageSize        int32                   `json:"page_size" form:"page_size" binding:"required"`
+	SearchCondition *entity.ProblemSearchCondition `json:"search_condition" form:"search_condition" binding:"required"`
+	PageNo          int32                          `json:"page_no" form:"page_no" binding:"required"`
+	PageSize        int32                          `json:"page_size" form:"page_size" binding:"required"`
 }
 
 type SearchProblemResponse struct {

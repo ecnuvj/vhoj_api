@@ -13,7 +13,7 @@ import (
 type IProblemService interface {
 	ListProblems(int32, int32) ([]*entity.Problem, *entity.Page, error)
 	ShowProblem(uint) (*entity.Problem, error)
-	SearchProblem(int32, int32, *entity.SearchCondition) ([]*entity.Problem, *entity.Page, error)
+	SearchProblem(int32, int32, *entity.ProblemSearchCondition) ([]*entity.Problem, *entity.Page, error)
 }
 
 var ProblemService IProblemService = &ProblemServiceImpl{}
@@ -52,7 +52,7 @@ func (p *ProblemServiceImpl) ShowProblem(problemId uint) (*entity.Problem, error
 	return adapter.RpcProblemToEntityProblem(resp.Problem), nil
 }
 
-func (p *ProblemServiceImpl) SearchProblem(pageNo int32, pageSize int32, condition *entity.SearchCondition) ([]*entity.Problem, *entity.Page, error) {
+func (p *ProblemServiceImpl) SearchProblem(pageNo int32, pageSize int32, condition *entity.ProblemSearchCondition) ([]*entity.Problem, *entity.Page, error) {
 	request := &problempb.SearchProblemByConditionRequest{
 		Title:     condition.Title,
 		ProblemId: uint64(condition.ProblemId),

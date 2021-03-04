@@ -14,7 +14,8 @@ type CreateContestRequest struct {
 }
 
 type CreateContestResponse struct {
-	BaseResponse *BaseResponse `json:"base_response"`
+	Contest      *entity.Contest `json:"contest"`
+	BaseResponse *BaseResponse   `json:"base_response"`
 }
 
 type ListContestsRequest struct {
@@ -25,6 +26,35 @@ type ListContestsRequest struct {
 type ListContestsResponse struct {
 	BaseResponse *BaseResponse     `json:"base_response"`
 	Contests     []*entity.Contest `json:"contests"`
+}
+
+type SearchContestRequest struct {
+	SearchCondition *entity.ContestSearchCondition `json:"search_condition" form:"search_condition" binding:"required"`
+	PageNo          int32                          `json:"page_no" form:"page_no" binding:"required"`
+	PageSize        int32                          `json:"page_size" form:"page_size" binding:"required"`
+}
+
+type SearchContestResponse struct {
+	Contests     []*entity.Contest `json:"contests"`
+	BaseResponse *BaseResponse     `json:"base_response"`
+}
+
+type AddContestProblemRequest struct {
+	ContestId uint `json:"contest_id" form:"contest_id" binding:"required"`
+	ProblemId uint `json:"problem_id" form:"problem_id" binding:"required"`
+}
+
+type AddContestProblemResponse struct {
+	BaseResponse *BaseResponse `json:"base_response"`
+}
+
+type DeleteContestProblemRequest struct {
+	ContestId uint `json:"contest_id" form:"contest_id" binding:"required"`
+	ProblemId uint `json:"problem_id" form:"contest_id" binding:"required"`
+}
+
+type DeleteContestProblemResponse struct {
+	BaseResponse *BaseResponse `json:"base_response"`
 }
 
 type JoinContestRequest struct {
@@ -51,7 +81,6 @@ type UpdateContestRequest struct {
 	Description string    `json:"description" form:"description"`
 	StartTime   time.Time `json:"start_time" form:"start_time" `
 	EndTime     time.Time `json:"end_time" form:"end_time"`
-	ProblemIds  []uint    `json:"problem_ids" form:"problem_ids"`
 }
 
 type UpdateContestResponse struct {
@@ -64,6 +93,15 @@ type AddContestAdminRequest struct {
 }
 
 type AddContestAdminResponse struct {
+	BaseResponse *BaseResponse `json:"base_response"`
+}
+
+type DeleteContestAdminRequest struct {
+	ContestId uint `json:"contest_id" form:"contest_id" binding:"required"`
+	UserId    uint `json:"user_id" form:"user_id" binding:"required"`
+}
+
+type DeleteContestAdminResponse struct {
 	BaseResponse *BaseResponse `json:"base_response"`
 }
 
