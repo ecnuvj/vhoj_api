@@ -7,19 +7,26 @@ import (
 
 //no password
 func RpcUserToEntityUser(user *userpb.User) *entity.User {
+	if user == nil {
+		return &entity.User{}
+	}
 	return &entity.User{
 		UserId:     uint(user.UserId),
 		Username:   user.Username,
 		Email:      user.Email,
 		School:     user.School,
 		UserAuthId: uint(user.UserAuthId),
-		Roles:      RpcRolesToEntityRoles(user.Roles),
-		Accepted:   user.Accepted,
-		Submitted:  user.Submitted,
+		//Password:   user.Password,
+		Roles:     RpcRolesToEntityRoles(user.Roles),
+		Accepted:  user.Accepted,
+		Submitted: user.Submitted,
 	}
 }
 
 func EntityUserToRpcUser(user *entity.User) *userpb.User {
+	if user == nil {
+		return &userpb.User{}
+	}
 	return &userpb.User{
 		UserId:     uint64(user.UserId),
 		Username:   user.Username,

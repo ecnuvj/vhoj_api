@@ -44,6 +44,13 @@ func Init() {
 		contest.POST("/rank", handler.ContestRank)
 	}
 
+	status := router.Group("/status")
+	{
+		status.POST("/list", handler.ListSubmissions)
+		status.POST("/showCode", handler.ShowSubmissionCode)
+		status.POST("/reSubmit", handler.ReSubmitCode)
+	}
+
 	if err := router.Run(":8080"); err != nil {
 		log.Fatalf("router run error: %v", err)
 	}

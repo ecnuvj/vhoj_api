@@ -10,6 +10,9 @@ import (
 
 //not contain problem entity
 func EntityContestToRpcContest(contest *entity.Contest) *problempb.Contest {
+	if contest == nil {
+		return &problempb.Contest{}
+	}
 	startTime, _ := ptypes.TimestampProto(contest.StartTime)
 	endTime, _ := ptypes.TimestampProto(contest.EndTime)
 	problemIds := make([]uint64, len(contest.ProblemIds))
@@ -28,6 +31,9 @@ func EntityContestToRpcContest(contest *entity.Contest) *problempb.Contest {
 }
 
 func RpcContestToEntityContest(contest *problempb.Contest) *entity.Contest {
+	if contest == nil {
+		return &entity.Contest{}
+	}
 	problemIds := make([]uint, len(contest.ProblemIds))
 	for i, p := range contest.ProblemIds {
 		problemIds[i] = uint(p)

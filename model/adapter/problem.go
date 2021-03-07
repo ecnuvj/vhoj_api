@@ -6,6 +6,9 @@ import (
 )
 
 func RpcProblemToEntityProblem(problem *problempb.Problem) *entity.Problem {
+	if problem == nil {
+		return &entity.Problem{}
+	}
 	return &entity.Problem{
 		ProblemId:    uint(problem.ProblemId),
 		Title:        problem.Title,

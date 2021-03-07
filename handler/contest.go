@@ -7,6 +7,7 @@ import (
 	"github.com/ecnuvj/vhoj_api/util"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"time"
 )
 
 func CreateContest(c *gin.Context) {
@@ -17,13 +18,21 @@ func CreateContest(c *gin.Context) {
 		})
 		return
 	}
+	//todo real userid
+	user, err := service.UserService.GetUserById(9)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, &contract.CreateContestResponse{
+			BaseResponse: util.NewFailureResponse("find creator error: %v", err),
+		})
+		return
+	}
 	//creator 只需id
 	contest := &entity.Contest{
 		Title:       request.Title,
 		Description: request.Description,
-		StartTime:   request.StartTime,
-		EndTime:     request.EndTime,
-		Creator:     nil,
+		StartTime:   time.Unix(request.StartTime, 0),
+		EndTime:     time.Unix(request.EndTime, 0),
+		Creator:     user,
 		ProblemIds:  request.ProblemIds,
 	}
 	retContest, err := service.ContestService.CreateContest(contest)
@@ -47,6 +56,18 @@ func ListContests(c *gin.Context) {
 		})
 		return
 	}
+	contests, pageInfo, err := service.ContestService.ListContests(request.PageNo, request.PageSize)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, &contract.ListContestsResponse{
+			BaseResponse: util.NewFailureResponse("service error: %v", err),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, &contract.ListContestsResponse{
+		BaseResponse: util.NewSuccessResponse("success"),
+		Contests:     contests,
+		PageInfo:     pageInfo,
+	})
 }
 
 func SearchContest(c *gin.Context) {
@@ -57,6 +78,18 @@ func SearchContest(c *gin.Context) {
 		})
 		return
 	}
+	contests, pageInfo, err := service.ContestService.SearchContest(request.PageNo, request.PageSize, request.SearchCondition)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, &contract.SearchContestResponse{
+			BaseResponse: util.NewFailureResponse("service error: %v", err),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, &contract.SearchContestResponse{
+		Contests:     contests,
+		BaseResponse: util.NewSuccessResponse("success"),
+		PageInfo:     pageInfo,
+	})
 }
 
 func JoinContest(c *gin.Context) {
@@ -67,6 +100,16 @@ func JoinContest(c *gin.Context) {
 		})
 		return
 	}
+	err := service.ContestService.JoinContest(request.ContestId, request.UserId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, &contract.JoinContestResponse{
+			BaseResponse: util.NewFailureResponse("service error: %v", err),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, &contract.JoinContestResponse{
+		BaseResponse: util.NewSuccessResponse("success"),
+	})
 }
 
 func ShowContest(c *gin.Context) {
@@ -77,6 +120,17 @@ func ShowContest(c *gin.Context) {
 		})
 		return
 	}
+	contest, err := service.ContestService.ShowContest(request.ContestId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, &contract.ShowContestResponse{
+			BaseResponse: util.NewFailureResponse("service error: %v", err),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, &contract.ShowContestResponse{
+		Contest:      contest,
+		BaseResponse: util.NewSuccessResponse("success"),
+	})
 }
 
 func UpdateContest(c *gin.Context) {
@@ -88,6 +142,24 @@ func UpdateContest(c *gin.Context) {
 		})
 		return
 	}
+	contest := &entity.Contest{
+		ContestId:   request.ContestId,
+		Title:       request.Title,
+		Description: request.Description,
+		StartTime:   time.Unix(request.StartTime, 0),
+		EndTime:     time.Unix(request.EndTime, 0),
+	}
+	retContest, err := service.ContestService.UpdateContest(request.ContestId, contest)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, &contract.UpdateContestResponse{
+			BaseResponse: util.NewFailureResponse("service error: %v", err),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, &contract.UpdateContestResponse{
+		Contest:      retContest,
+		BaseResponse: util.NewSuccessResponse("success"),
+	})
 }
 
 func AddContestProblem(c *gin.Context) {
@@ -98,6 +170,16 @@ func AddContestProblem(c *gin.Context) {
 		})
 		return
 	}
+	err := service.ContestService.AddContestProblem(request.ContestId, request.ProblemId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, &contract.AddContestProblemResponse{
+			BaseResponse: util.NewFailureResponse("service error: %v", err),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, &contract.AddContestProblemResponse{
+		BaseResponse: util.NewSuccessResponse("success"),
+	})
 }
 
 func DeleteContestProblem(c *gin.Context) {
@@ -108,6 +190,16 @@ func DeleteContestProblem(c *gin.Context) {
 		})
 		return
 	}
+	err := service.ContestService.DeleteContestProblem(request.ContestId, request.ProblemId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, &contract.DeleteContestProblemResponse{
+			BaseResponse: util.NewFailureResponse("service error: %v", err),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, &contract.DeleteContestProblemResponse{
+		BaseResponse: util.NewSuccessResponse("success"),
+	})
 }
 
 func AddContestAdmin(c *gin.Context) {
@@ -119,6 +211,16 @@ func AddContestAdmin(c *gin.Context) {
 		})
 		return
 	}
+	err := service.ContestService.AddContestAdmin(request.ContestId, request.UserId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, &contract.AddContestAdminResponse{
+			BaseResponse: util.NewFailureResponse("service error: %v", err),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, &contract.AddContestAdminResponse{
+		BaseResponse: util.NewSuccessResponse("success"),
+	})
 }
 
 func DeleteContestAdmin(c *gin.Context) {
@@ -130,6 +232,16 @@ func DeleteContestAdmin(c *gin.Context) {
 		})
 		return
 	}
+	err := service.ContestService.DeleteContestAdmin(request.ContestId, request.UserId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, &contract.DeleteContestAdminResponse{
+			BaseResponse: util.NewFailureResponse("service error: %v", err),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, &contract.DeleteContestAdminResponse{
+		BaseResponse: util.NewSuccessResponse("success"),
+	})
 }
 
 func GenerateParticipants(c *gin.Context) {
@@ -141,6 +253,17 @@ func GenerateParticipants(c *gin.Context) {
 		})
 		return
 	}
+	users, err := service.ContestService.GenerateParticipants(request.ContestId, request.GenerateCount)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, &contract.GenerateParticipantsResponse{
+			BaseResponse: util.NewFailureResponse("service error: %v", err),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, &contract.GenerateParticipantsResponse{
+		Users:        users,
+		BaseResponse: util.NewSuccessResponse("success"),
+	})
 }
 
 func ContestRank(c *gin.Context) {

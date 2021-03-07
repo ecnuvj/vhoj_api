@@ -2,15 +2,14 @@ package contract
 
 import (
 	"github.com/ecnuvj/vhoj_api/model/entity"
-	"time"
 )
 
 type CreateContestRequest struct {
-	Title       string    `json:"title" form:"title" binding:"required"`
-	Description string    `json:"description" form:"description"`
-	StartTime   time.Time `json:"start_time" form:"start_time" binding:"required"`
-	EndTime     time.Time `json:"end_time" form:"end_time" binding:"required"`
-	ProblemIds  []uint    `json:"problem_ids" form:"problem_ids"`
+	Title       string `json:"title" form:"title" binding:"required"`
+	Description string `json:"description" form:"description"`
+	StartTime   int64  `json:"start_time" time_format:"unix" form:"start_time"  binding:"required"`
+	EndTime     int64  `json:"end_time" time_format:"unix" form:"end_time" binding:"required"`
+	ProblemIds  []uint `json:"problem_ids" form:"problem_ids"`
 }
 
 type CreateContestResponse struct {
@@ -26,6 +25,7 @@ type ListContestsRequest struct {
 type ListContestsResponse struct {
 	BaseResponse *BaseResponse     `json:"base_response"`
 	Contests     []*entity.Contest `json:"contests"`
+	PageInfo     *entity.Page      `json:"page_info"`
 }
 
 type SearchContestRequest struct {
@@ -37,6 +37,7 @@ type SearchContestRequest struct {
 type SearchContestResponse struct {
 	Contests     []*entity.Contest `json:"contests"`
 	BaseResponse *BaseResponse     `json:"base_response"`
+	PageInfo     *entity.Page      `json:"page_info"`
 }
 
 type AddContestProblemRequest struct {
@@ -76,15 +77,16 @@ type ShowContestResponse struct {
 }
 
 type UpdateContestRequest struct {
-	ContestId   uint      `json:"contest_id" form:"contest_id" binding:"required"`
-	Title       string    `json:"title" form:"title"`
-	Description string    `json:"description" form:"description"`
-	StartTime   time.Time `json:"start_time" form:"start_time" `
-	EndTime     time.Time `json:"end_time" form:"end_time"`
+	ContestId   uint   `json:"contest_id" form:"contest_id" binding:"required"`
+	Title       string `json:"title" form:"title"`
+	Description string `json:"description" form:"description"`
+	StartTime   int64  `json:"start_time" form:"start_time" time_format:"unix"`
+	EndTime     int64  `json:"end_time" form:"end_time" time_format:"unix"`
 }
 
 type UpdateContestResponse struct {
-	BaseResponse *BaseResponse `json:"base_response"`
+	Contest      *entity.Contest `json:"contest"`
+	BaseResponse *BaseResponse   `json:"base_response"`
 }
 
 type AddContestAdminRequest struct {

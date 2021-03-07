@@ -2,6 +2,7 @@ package handler
 
 import (
 	"github.com/ecnuvj/vhoj_api/model/contract"
+	"github.com/ecnuvj/vhoj_api/model/entity"
 	"github.com/ecnuvj/vhoj_api/service"
 	"github.com/ecnuvj/vhoj_api/util"
 	"github.com/gin-gonic/gin"
@@ -42,6 +43,16 @@ func ReSubmitCode(c *gin.Context) {
 		})
 		return
 	}
+	err := service.SubmitService.ReSubmitCode(request.SubmissionId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, &contract.ReSubmitCodeResponse{
+			BaseResponse: util.NewFailureResponse("service error: %v", err),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, &contract.ReSubmitCodeResponse{
+		BaseResponse: util.NewSuccessResponse("success"),
+	})
 }
 
 func ListSubmissions(c *gin.Context) {
@@ -52,6 +63,23 @@ func ListSubmissions(c *gin.Context) {
 		})
 		return
 	}
+	submissions, pageInfo, err := service.SubmitService.ListSubmission(request.PageNo, request.PageSize, &entity.SubmissionSearchCondition{
+		Username:  request.Username,
+		ProblemId: request.ProblemId,
+		Status:    request.Status,
+		Language:  request.Language,
+	})
+	if err != nil {
+		c.JSON(http.StatusBadRequest, &contract.ListSubmissionsResponse{
+			BaseResponse: util.NewFailureResponse("service error: %v", err),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, &contract.ListSubmissionsResponse{
+		BaseResponse: util.NewSuccessResponse("success"),
+		Submissions:  submissions,
+		PageInfo:     pageInfo,
+	})
 }
 
 func CheckSubmissionStatus(c *gin.Context) {
@@ -73,4 +101,15 @@ func ShowSubmissionCode(c *gin.Context) {
 		})
 		return
 	}
+	code, err := service.SubmitService.GetSubmissionCode(request.SubmissionId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, &contract.ShowSubmissionCodeResponse{
+			BaseResponse: util.NewFailureResponse("service error: %v", err),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, &contract.ShowSubmissionCodeResponse{
+		SubmissionCode: code,
+		BaseResponse:   util.NewSuccessResponse("success"),
+	})
 }

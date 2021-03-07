@@ -15,6 +15,14 @@ type IContestService interface {
 	ListContests(int32, int32) ([]*entity.Contest, *entity.Page, error)
 	ShowContest(uint) (*entity.Contest, error)
 	SearchContest(int32, int32, *entity.ContestSearchCondition) ([]*entity.Contest, *entity.Page, error)
+	JoinContest(uint, uint) error
+	UpdateContest(uint, *entity.Contest) (*entity.Contest, error)
+	AddContestProblem(uint, uint) error
+	DeleteContestProblem(uint, uint) error
+	AddContestAdmin(uint, uint) error
+	DeleteContestAdmin(uint, uint) error
+	GenerateParticipants(uint, int32) ([]*entity.User, error)
+	ContestRank(uint) (*entity.Rank, error)
 }
 
 var ContestService IContestService = &ContestServiceImpl{}
@@ -86,4 +94,114 @@ func (c *ContestServiceImpl) SearchContest(pageNo int32, pageSize int32, conditi
 		TotalCount: resp.TotalCount,
 		TotalPages: resp.TotalPages,
 	}, nil
+}
+
+func (c *ContestServiceImpl) JoinContest(contestId uint, userId uint) error {
+	request := &problempb.AddContestParticipantRequest{
+		ContestId: uint64(contestId),
+		UserId:    uint64(userId),
+	}
+	resp, err := rpc_problem.ProblemServiceClient.AddContestParticipant(context.Background(), request)
+	if err != nil {
+		return err
+	}
+	if resp.BaseResponse.Status != base.REPLY_STATUS_SUCCESS {
+		return fmt.Errorf("resp error: %v", resp.BaseResponse.Message)
+	}
+	return nil
+}
+
+func (c *ContestServiceImpl) UpdateContest(contestId uint, contest *entity.Contest) (*entity.Contest, error) {
+	request := &problempb.UpdateContestRequest{
+		ContestId: uint64(contestId),
+		Contest:   adapter.EntityContestToRpcContest(contest),
+	}
+	resp, err := rpc_problem.ProblemServiceClient.UpdateContest(context.Background(), request)
+	if err != nil {
+		return nil, err
+	}
+	if resp.BaseResponse.Status != base.REPLY_STATUS_SUCCESS {
+		return nil, fmt.Errorf("resp error: %v", resp.BaseResponse.Message)
+	}
+	return adapter.RpcContestToEntityContest(resp.Contest), nil
+}
+
+func (c *ContestServiceImpl) AddContestProblem(contestId uint, problemId uint) error {
+	request := &problempb.AddContestProblemRequest{
+		ContestId: uint64(contestId),
+		ProblemId: uint64(problemId),
+	}
+	resp, err := rpc_problem.ProblemServiceClient.AddContestProblem(context.Background(), request)
+	if err != nil {
+		return err
+	}
+	if resp.BaseResponse.Status != base.REPLY_STATUS_SUCCESS {
+		return fmt.Errorf("resp error: %v", resp.BaseResponse.Message)
+	}
+	return nil
+}
+
+func (c *ContestServiceImpl) DeleteContestProblem(contestId uint, problemId uint) error {
+	request := &problempb.DeleteContestProblemRequest{
+		ContestId: uint64(contestId),
+		ProblemId: uint64(problemId),
+	}
+	resp, err := rpc_problem.ProblemServiceClient.DeleteContestProblem(context.Background(), request)
+	if err != nil {
+		return err
+	}
+	if resp.BaseResponse.Status != base.REPLY_STATUS_SUCCESS {
+		return fmt.Errorf("resp error: %v", resp.BaseResponse.Message)
+	}
+	return nil
+}
+
+func (c *ContestServiceImpl) AddContestAdmin(contestId uint, userId uint) error {
+	request := &problempb.AddContestAdminRequest{
+		ContestId: uint64(contestId),
+		UserId:    uint64(userId),
+	}
+	resp, err := rpc_problem.ProblemServiceClient.AddContestAdmin(context.Background(), request)
+	if err != nil {
+		return err
+	}
+	if resp.BaseResponse.Status != base.REPLY_STATUS_SUCCESS {
+		return fmt.Errorf("resp error: %v", resp.BaseResponse.Message)
+	}
+	return nil
+}
+
+func (c *ContestServiceImpl) DeleteContestAdmin(contestId uint, userId uint) error {
+	request := &problempb.DeleteContestAdminRequest{
+		ContestId: uint64(contestId),
+		UserId:    uint64(userId),
+	}
+	resp, err := rpc_problem.ProblemServiceClient.DeleteContestAdmin(context.Background(), request)
+	if err != nil {
+		return err
+	}
+	if resp.BaseResponse.Status != base.REPLY_STATUS_SUCCESS {
+		return fmt.Errorf("resp error: %v", resp.BaseResponse.Message)
+	}
+	return nil
+}
+
+func (c *ContestServiceImpl) GenerateParticipants(contestId uint, count int32) ([]*entity.User, error) {
+	request := &problempb.GenerateContestParticipantsRequest{
+		ContestId:     uint64(contestId),
+		GenerateCount: count,
+	}
+	resp, err := rpc_problem.ProblemServiceClient.GenerateContestParticipants(context.Background(), request)
+	if err != nil {
+		return nil, err
+	}
+	if resp.BaseResponse.Status != base.REPLY_STATUS_SUCCESS {
+		return nil, fmt.Errorf("resp error: %v", resp.BaseResponse.Message)
+	}
+	return adapter.RpcUsersToEntityUsers(resp.Users), nil
+}
+
+func (c *ContestServiceImpl) ContestRank(u uint) (*entity.Rank, error) {
+	//todo
+	panic("implement me")
 }
