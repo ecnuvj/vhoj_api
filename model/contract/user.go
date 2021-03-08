@@ -59,3 +59,12 @@ type UpdateUserInfoResponse struct {
 	User         *entity.User  `json:"user"`
 	BaseResponse *BaseResponse `json:"base_response"`
 }
+
+type UserInfoRequest struct {
+	UserId uint `json:"user_id" form:"user_id" binding:"required"`
+}
+
+type UserInfoResponse struct {
+	User         *entity.User  `json:"user"`
+	BaseResponse *BaseResponse `json:"base_response"`
+}

@@ -1,8 +1,11 @@
 package router
 
 import (
+	_ "github.com/ecnuvj/vhoj_api/docs"
 	"github.com/ecnuvj/vhoj_api/handler"
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 	"log"
 )
 
@@ -14,6 +17,7 @@ func Init() {
 		user.POST("/login", handler.Login)
 		user.POST("/register", handler.Register)
 		user.POST("/update", handler.UpdateUserInfo)
+		user.POST("/info", handler.UserInfo)
 		//todo auth
 		user.POST("/auth", handler.AuthUser)
 		user.GET("/list", handler.ListUsers)
@@ -50,6 +54,8 @@ func Init() {
 		status.POST("/showCode", handler.ShowSubmissionCode)
 		status.POST("/reSubmit", handler.ReSubmitCode)
 	}
+
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	if err := router.Run(":8080"); err != nil {
 		log.Fatalf("router run error: %v", err)

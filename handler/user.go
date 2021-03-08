@@ -8,6 +8,16 @@ import (
 	"net/http"
 )
 
+// @Tags user
+// @Summary 用户列表
+// @Description 分页用户
+// @Accept  json
+// @Produce json
+// @Param Authorization header string true "Authentication Token"
+// @Param   request body contract.ListUsersRequest true "list user request"
+// @Success 200 {object} contract.ListUsersResponse
+// @Failure 400 {object} contract.ListUsersResponse
+// @Router /user/list [get]
 func ListUsers(c *gin.Context) {
 	request := &contract.ListUsersRequest{}
 	if err := c.ShouldBindJSON(request); err != nil {
@@ -30,6 +40,16 @@ func ListUsers(c *gin.Context) {
 	})
 }
 
+// @Tags user
+// @Summary 授权用户
+// @Description 授权用户
+// @Accept  json
+// @Produce json
+// @Param Authorization header string true "Authentication Token"
+// @Param   request body contract.AuthUserRequest true "auth user request"
+// @Success 200 {object} contract.AuthUserResponse
+// @Failure 400 {object} contract.AuthUserResponse
+// @Router /user/auth [post]
 func AuthUser(c *gin.Context) {
 	request := &contract.AuthUserRequest{}
 	if err := c.ShouldBindJSON(request); err != nil {
@@ -52,6 +72,16 @@ func AuthUser(c *gin.Context) {
 	})
 }
 
+// @Tags user
+// @Summary 删除用户
+// @Description 删除用户
+// @Accept  json
+// @Produce json
+// @Param Authorization header string true "Authentication Token"
+// @Param   request body contract.DeleteUserRequest true "delete user request"
+// @Success 200 {object} contract.DeleteUserResponse
+// @Failure 400 {object} contract.DeleteUserResponse
+// @Router /user/delete [delete]
 func DeleteUser(c *gin.Context) {
 	request := &contract.DeleteUserRequest{}
 	if err := c.ShouldBindJSON(request); err != nil {
@@ -72,6 +102,16 @@ func DeleteUser(c *gin.Context) {
 	})
 }
 
+// @Tags user
+// @Summary 登录
+// @Description 登录
+// @Accept  json
+// @Produce json
+// @Param Authorization header string true "Authentication Token"
+// @Param   request body contract.LoginRequest true
+// @Success 200 {object} contract.LoginResponse
+// @Failure 400 {object} contract.LoginResponse
+// @Router /user/login [post]
 func Login(c *gin.Context) {
 	request := &contract.LoginRequest{}
 	if err := c.ShouldBindJSON(request); err != nil {
@@ -93,6 +133,16 @@ func Login(c *gin.Context) {
 	})
 }
 
+// @Tags user
+// @Summary 注册
+// @Description 注册
+// @Accept  json
+// @Produce json
+// @Param Authorization header string true "Authentication Token"
+// @Param   request body contract.RegisterRequest true
+// @Success 200 {object} contract.RegisterResponse
+// @Failure 400 {object} contract.RegisterResponse
+// @Router /user/register [post]
 func Register(c *gin.Context) {
 	request := &contract.RegisterRequest{}
 	if err := c.ShouldBindJSON(request); err != nil {
@@ -114,6 +164,16 @@ func Register(c *gin.Context) {
 	})
 }
 
+// @Tags user
+// @Summary 更新信息
+// @Description 更新信息
+// @Accept  json
+// @Produce json
+// @Param Authorization header string true "Authentication Token"
+// @Param   request body contract.UpdateUserInfoRequest true
+// @Success 200 {object} contract.UpdateUserInfoResponse
+// @Failure 400 {object} contract.UpdateUserInfoResponse
+// @Router /user/register [post]
 func UpdateUserInfo(c *gin.Context) {
 	request := &contract.UpdateUserInfoRequest{}
 	if err := c.ShouldBindJSON(request); err != nil {
@@ -132,5 +192,36 @@ func UpdateUserInfo(c *gin.Context) {
 	c.JSON(http.StatusOK, &contract.UpdateUserInfoResponse{
 		User:         user,
 		BaseResponse: util.NewSuccessResponse("update success"),
+	})
+}
+
+// @Tags user
+// @Summary 用户信息
+// @Description 用户信息
+// @Accept  json
+// @Produce json
+// @Param Authorization header string true "Authentication Token"
+// @Param   request body contract.UserInfoRequest true
+// @Success 200 {object} contract.UserInfoResponse
+// @Failure 400 {object} contract.UserInfoResponse
+// @Router /user/info [post]
+func UserInfo(c *gin.Context) {
+	request := &contract.UserInfoRequest{}
+	if err := c.ShouldBindJSON(request); err != nil {
+		c.JSON(http.StatusBadRequest, &contract.UserInfoResponse{
+			BaseResponse: util.NewFailureResponse("request param error, err: %v", err),
+		})
+		return
+	}
+	user, err := service.UserService.GetUserById(request.UserId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, &contract.UserInfoResponse{
+			BaseResponse: util.NewFailureResponse("service error: %v", err),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, &contract.UserInfoResponse{
+		User:         user,
+		BaseResponse: util.NewSuccessResponse("success"),
 	})
 }

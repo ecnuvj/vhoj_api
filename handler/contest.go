@@ -10,6 +10,16 @@ import (
 	"time"
 )
 
+// @Tags contest
+// @Summary 创建比赛
+// @Description 创建比赛
+// @Accept  json
+// @Produce json
+// @Param Authorization header string true "Authentication Token"
+// @Param   request body contract.CreateContestRequest true "request"s
+// @Success 200 {object} contract.CreateContestResponse
+// @Failure 400 {object} contract.CreateContestResponse
+// @Router /contest/create [post]
 func CreateContest(c *gin.Context) {
 	request := &contract.CreateContestRequest{}
 	if err := c.ShouldBindJSON(request); err != nil {
@@ -48,6 +58,16 @@ func CreateContest(c *gin.Context) {
 	})
 }
 
+// @Tags contest
+// @Summary 比赛列表
+// @Description 比赛列表
+// @Accept  json
+// @Produce json
+// @Param Authorization header string true "Authentication Token"
+// @Param   request body contract.ListContestsRequest true "request"
+// @Success 200 {object} contract.ListContestsResponse
+// @Failure 400 {object} contract.ListContestsResponse
+// @Router /contest/list [get]
 func ListContests(c *gin.Context) {
 	request := &contract.ListContestsRequest{}
 	if err := c.ShouldBindJSON(request); err != nil {
@@ -70,6 +90,16 @@ func ListContests(c *gin.Context) {
 	})
 }
 
+// @Tags contest
+// @Summary 比赛搜索
+// @Description 比赛搜索
+// @Accept  json
+// @Produce json
+// @Param Authorization header string true "Authentication Token"
+// @Param   request body contract.SearchContestRequest true "request"
+// @Success 200 {object} contract.SearchContestResponse
+// @Failure 400 {object} contract.SearchContestResponse
+// @Router /contest/search [post]
 func SearchContest(c *gin.Context) {
 	request := &contract.SearchContestRequest{}
 	if err := c.ShouldBindJSON(request); err != nil {
@@ -92,6 +122,16 @@ func SearchContest(c *gin.Context) {
 	})
 }
 
+// @Tags contest
+// @Summary 加入比赛
+// @Description 加入比赛
+// @Accept  json
+// @Produce json
+// @Param Authorization header string true "Authentication Token"
+// @Param   request body contract.JoinContestRequest true "request"
+// @Success 200 {object} contract.JoinContestResponse
+// @Failure 400 {object} contract.JoinContestResponse
+// @Router /contest/join [post]
 func JoinContest(c *gin.Context) {
 	request := &contract.JoinContestRequest{}
 	if err := c.ShouldBindJSON(request); err != nil {
@@ -112,6 +152,16 @@ func JoinContest(c *gin.Context) {
 	})
 }
 
+// @Tags contest
+// @Summary 比赛详情
+// @Description 比赛详情
+// @Accept  json
+// @Produce json
+// @Param Authorization header string true "Authentication Token"
+// @Param   request body contract.ShowContestRequest true "request"
+// @Success 200 {object} contract.ShowContestResponse
+// @Failure 400 {object} contract.ShowContestResponse
+// @Router /contest/show [get]
 func ShowContest(c *gin.Context) {
 	request := &contract.ShowContestRequest{}
 	if err := c.ShouldBindJSON(request); err != nil {
@@ -133,6 +183,16 @@ func ShowContest(c *gin.Context) {
 	})
 }
 
+// @Tags contest
+// @Summary 比赛更新
+// @Description 比赛更新
+// @Accept  json
+// @Produce json
+// @Param Authorization header string true "Authentication Token"
+// @Param   request body contract.UpdateContestRequest true "request"
+// @Success 200 {object} contract.UpdateContestResponse
+// @Failure 400 {object} contract.UpdateContestResponse
+// @Router /contest/update [post]
 func UpdateContest(c *gin.Context) {
 	//todo 检查是否有权限修改
 	request := &contract.UpdateContestRequest{}
@@ -162,6 +222,16 @@ func UpdateContest(c *gin.Context) {
 	})
 }
 
+// @Tags contest
+// @Summary 添加比赛题目
+// @Description 添加比赛题目
+// @Accept  json
+// @Produce json
+// @Param Authorization header string true "Authentication Token"
+// @Param   request body contract.AddContestProblemRequest true "request"
+// @Success 200 {object} contract.AddContestProblemResponse
+// @Failure 400 {object} contract.AddContestProblemResponse
+// @Router /contest/problem/add [post]
 func AddContestProblem(c *gin.Context) {
 	request := &contract.AddContestProblemRequest{}
 	if err := c.ShouldBindJSON(request); err != nil {
@@ -182,6 +252,16 @@ func AddContestProblem(c *gin.Context) {
 	})
 }
 
+// @Tags contest
+// @Summary 删除比赛题目
+// @Description 删除比赛题目
+// @Accept  json
+// @Produce json
+// @Param Authorization header string true "Authentication Token"
+// @Param   request body contract.DeleteContestProblemRequest true "request"
+// @Success 200 {object} contract.DeleteContestProblemResponse
+// @Failure 400 {object} contract.DeleteContestProblemResponse
+// @Router /contest/problem/delete [delete]
 func DeleteContestProblem(c *gin.Context) {
 	request := &contract.DeleteContestProblemRequest{}
 	if err := c.ShouldBindJSON(request); err != nil {
@@ -202,6 +282,16 @@ func DeleteContestProblem(c *gin.Context) {
 	})
 }
 
+// @Tags contest
+// @Summary 添加比赛管理
+// @Description 添加比赛管理
+// @Accept  json
+// @Produce json
+// @Param Authorization header string true "Authentication Token"
+// @Param   request body contract.AddContestAdminRequest true "request"
+// @Success 200 {object} contract.AddContestAdminResponse
+// @Failure 400 {object} contract.AddContestAdminResponse
+// @Router /contest/admin/add [post]
 func AddContestAdmin(c *gin.Context) {
 	//todo 检查是否有权限修改
 	request := &contract.AddContestAdminRequest{}
@@ -223,6 +313,16 @@ func AddContestAdmin(c *gin.Context) {
 	})
 }
 
+// @Tags contest
+// @Summary 删除比赛管理
+// @Description 删除比赛管理
+// @Accept  json
+// @Produce json
+// @Param Authorization header string true "Authentication Token"
+// @Param   request body contract.DeleteContestAdminRequest true "request"
+// @Success 200 {object} contract.DeleteContestAdminResponse
+// @Failure 400 {object} contract.DeleteContestAdminResponse
+// @Router /contest/admin/delete [delete]
 func DeleteContestAdmin(c *gin.Context) {
 	//todo 检查是否有权限修改
 	request := &contract.DeleteContestAdminRequest{}
@@ -244,6 +344,16 @@ func DeleteContestAdmin(c *gin.Context) {
 	})
 }
 
+// @Tags contest
+// @Summary 生成比赛用户
+// @Description 生成比赛用户
+// @Accept  json
+// @Produce json
+// @Param Authorization header string true "Authentication Token"
+// @Param   request body contract.GenerateParticipantsRequest true "request"
+// @Success 200 {object} contract.GenerateParticipantsResponse
+// @Failure 400 {object} contract.GenerateParticipantsResponse
+// @Router /contest/generate [post]
 func GenerateParticipants(c *gin.Context) {
 	//todo 检查是否有权限生成
 	request := &contract.GenerateParticipantsRequest{}
@@ -266,6 +376,16 @@ func GenerateParticipants(c *gin.Context) {
 	})
 }
 
+// @Tags contest
+// @Summary 比赛排名
+// @Description 比赛排名
+// @Accept  json
+// @Produce json
+// @Param Authorization header string true "Authentication Token"
+// @Param   request body contract.ContestRankRequest true "request"
+// @Success 200 {object} contract.ContestRankResponse
+// @Failure 400 {object} contract.ContestRankResponse
+// @Router /contest/rank [post]
 func ContestRank(c *gin.Context) {
 	request := &contract.ContestRankRequest{}
 	if err := c.ShouldBindJSON(request); err != nil {

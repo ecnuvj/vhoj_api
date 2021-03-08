@@ -9,6 +9,16 @@ import (
 	"net/http"
 )
 
+// @Tags problem
+// @Summary 提交代码
+// @Description 提交代码
+// @Accept  json
+// @Produce json
+// @Param Authorization header string true "Authentication Token"
+// @Param   request body contract.SubmitCodeRequest true "request"
+// @Success 200 {object} contract.SubmitCodeResponse
+// @Failure 400 {object} contract.SubmitCodeResponse
+// @Router /problem/submit [post]
 func SubmitCode(c *gin.Context) {
 	request := &contract.SubmitCodeRequest{}
 	if err := c.ShouldBindJSON(request); err != nil {
@@ -35,6 +45,16 @@ func SubmitCode(c *gin.Context) {
 	})
 }
 
+// @Tags status
+// @Summary 重新提交代码
+// @Description 重新提交代码
+// @Accept  json
+// @Produce json
+// @Param Authorization header string true "Authentication Token"
+// @Param   request body contract.ReSubmitCodeRequest true "request"
+// @Success 200 {object} contract.ReSubmitCodeResponse
+// @Failure 400 {object} contract.ReSubmitCodeResponse
+// @Router /status/reSubmit [post]
 func ReSubmitCode(c *gin.Context) {
 	request := &contract.ReSubmitCodeRequest{}
 	if err := c.ShouldBindJSON(request); err != nil {
@@ -55,6 +75,16 @@ func ReSubmitCode(c *gin.Context) {
 	})
 }
 
+// @Tags status
+// @Summary 提交列表
+// @Description 提交列表
+// @Accept  json
+// @Produce json
+// @Param Authorization header string true "Authentication Token"
+// @Param   request body contract.ListSubmissionsRequest true "request"
+// @Success 200 {object} contract.ListSubmissionsResponse
+// @Failure 400 {object} contract.ListSubmissionsResponse
+// @Router /status/list [post]
 func ListSubmissions(c *gin.Context) {
 	request := &contract.ListSubmissionsRequest{}
 	if err := c.ShouldBindJSON(request); err != nil {
@@ -92,6 +122,16 @@ func CheckSubmissionStatus(c *gin.Context) {
 	}
 }
 
+// @Tags status
+// @Summary 查看代码
+// @Description 查看代码
+// @Accept  json
+// @Produce json
+// @Param Authorization header string true "Authentication Token"
+// @Param   request body contract.ShowSubmissionCodeRequest true "request"
+// @Success 200 {object} contract.ShowSubmissionCodeResponse
+// @Failure 400 {object} contract.ShowSubmissionCodeResponse
+// @Router /status/list [post]
 func ShowSubmissionCode(c *gin.Context) {
 	//todo 检查权限
 	request := &contract.ShowSubmissionCodeRequest{}
