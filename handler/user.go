@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"github.com/ecnuvj/vhoj_api/auth"
 	"github.com/ecnuvj/vhoj_api/model/contract"
 	"github.com/ecnuvj/vhoj_api/service"
 	"github.com/ecnuvj/vhoj_api/util"
@@ -108,7 +109,7 @@ func DeleteUser(c *gin.Context) {
 // @Accept  json
 // @Produce json
 // @Param Authorization header string true "Authentication Token"
-// @Param   request body contract.LoginRequest true
+// @Param   request body contract.LoginRequest true "request"
 // @Success 200 {object} contract.LoginResponse
 // @Failure 400 {object} contract.LoginResponse
 // @Router /user/login [post]
@@ -127,6 +128,8 @@ func Login(c *gin.Context) {
 		})
 		return
 	}
+	token, _ := auth.GenerateToken(user)
+	c.SetCookie("token", token, 3600, "/", "localhost", false, true)
 	c.JSON(http.StatusOK, &contract.LoginResponse{
 		User:         user,
 		BaseResponse: util.NewSuccessResponse("login success"),
@@ -139,7 +142,7 @@ func Login(c *gin.Context) {
 // @Accept  json
 // @Produce json
 // @Param Authorization header string true "Authentication Token"
-// @Param   request body contract.RegisterRequest true
+// @Param   request body contract.RegisterRequest true "request"
 // @Success 200 {object} contract.RegisterResponse
 // @Failure 400 {object} contract.RegisterResponse
 // @Router /user/register [post]
@@ -170,7 +173,7 @@ func Register(c *gin.Context) {
 // @Accept  json
 // @Produce json
 // @Param Authorization header string true "Authentication Token"
-// @Param   request body contract.UpdateUserInfoRequest true
+// @Param   request body contract.UpdateUserInfoRequest true "request"
 // @Success 200 {object} contract.UpdateUserInfoResponse
 // @Failure 400 {object} contract.UpdateUserInfoResponse
 // @Router /user/register [post]
@@ -201,7 +204,7 @@ func UpdateUserInfo(c *gin.Context) {
 // @Accept  json
 // @Produce json
 // @Param Authorization header string true "Authentication Token"
-// @Param   request body contract.UserInfoRequest true
+// @Param   request body contract.UserInfoRequest true "request"
 // @Success 200 {object} contract.UserInfoResponse
 // @Failure 400 {object} contract.UserInfoResponse
 // @Router /user/info [post]

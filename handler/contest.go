@@ -16,7 +16,7 @@ import (
 // @Accept  json
 // @Produce json
 // @Param Authorization header string true "Authentication Token"
-// @Param   request body contract.CreateContestRequest true "request"s
+// @Param   request body contract.CreateContestRequest true "request"
 // @Success 200 {object} contract.CreateContestResponse
 // @Failure 400 {object} contract.CreateContestResponse
 // @Router /contest/create [post]

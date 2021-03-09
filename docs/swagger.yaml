@@ -1,4 +1,34 @@
 definitions:
+  contract.AddContestAdminRequest:
+    properties:
+      contest_id:
+        type: integer
+      user_id:
+        type: integer
+    required:
+    - contest_id
+    - user_id
+    type: object
+  contract.AddContestAdminResponse:
+    properties:
+      base_response:
+        $ref: '#/definitions/contract.BaseResponse'
+    type: object
+  contract.AddContestProblemRequest:
+    properties:
+      contest_id:
+        type: integer
+      problem_id:
+        type: integer
+    required:
+    - contest_id
+    - problem_id
+    type: object
+  contract.AddContestProblemResponse:
+    properties:
+      base_response:
+        $ref: '#/definitions/contract.BaseResponse'
+    type: object
   contract.AuthUserRequest:
     properties:
       roles:
@@ -25,6 +55,193 @@ definitions:
       status_info:
         $ref: '#/definitions/contract.StatusInfo'
     type: object
+  contract.ContestRankRequest:
+    properties:
+      contest_id:
+        type: integer
+    required:
+    - contest_id
+    type: object
+  contract.ContestRankResponse:
+    properties:
+      base_response:
+        $ref: '#/definitions/contract.BaseResponse'
+      rank:
+        $ref: '#/definitions/entity.Rank'
+    type: object
+  contract.CreateContestRequest:
+    properties:
+      description:
+        type: string
+      end_time:
+        type: integer
+      problem_ids:
+        items:
+          type: integer
+        type: array
+      start_time:
+        type: integer
+      title:
+        type: string
+    required:
+    - end_time
+    - start_time
+    - title
+    type: object
+  contract.CreateContestResponse:
+    properties:
+      base_response:
+        $ref: '#/definitions/contract.BaseResponse'
+      contest:
+        $ref: '#/definitions/entity.Contest'
+    type: object
+  contract.DeleteContestAdminRequest:
+    properties:
+      contest_id:
+        type: integer
+      user_id:
+        type: integer
+    required:
+    - contest_id
+    - user_id
+    type: object
+  contract.DeleteContestAdminResponse:
+    properties:
+      base_response:
+        $ref: '#/definitions/contract.BaseResponse'
+    type: object
+  contract.DeleteContestProblemRequest:
+    properties:
+      contest_id:
+        type: integer
+      problem_id:
+        type: integer
+    required:
+    - contest_id
+    - problem_id
+    type: object
+  contract.DeleteContestProblemResponse:
+    properties:
+      base_response:
+        $ref: '#/definitions/contract.BaseResponse'
+    type: object
+  contract.DeleteUserRequest:
+    properties:
+      user_id:
+        type: integer
+    required:
+    - user_id
+    type: object
+  contract.DeleteUserResponse:
+    properties:
+      base_response:
+        $ref: '#/definitions/contract.BaseResponse'
+    type: object
+  contract.GenerateParticipantsRequest:
+    properties:
+      contest_id:
+        type: integer
+      generate_count:
+        type: integer
+    required:
+    - contest_id
+    - generate_count
+    type: object
+  contract.GenerateParticipantsResponse:
+    properties:
+      base_response:
+        $ref: '#/definitions/contract.BaseResponse'
+      users:
+        items:
+          $ref: '#/definitions/entity.User'
+        type: array
+    type: object
+  contract.JoinContestRequest:
+    properties:
+      contest_id:
+        type: integer
+      user_id:
+        type: integer
+    required:
+    - contest_id
+    - user_id
+    type: object
+  contract.JoinContestResponse:
+    properties:
+      base_response:
+        $ref: '#/definitions/contract.BaseResponse'
+    type: object
+  contract.ListContestsRequest:
+    properties:
+      page_no:
+        type: integer
+      page_size:
+        type: integer
+    required:
+    - page_no
+    - page_size
+    type: object
+  contract.ListContestsResponse:
+    properties:
+      base_response:
+        $ref: '#/definitions/contract.BaseResponse'
+      contests:
+        items:
+          $ref: '#/definitions/entity.Contest'
+        type: array
+      page_info:
+        $ref: '#/definitions/entity.Page'
+    type: object
+  contract.ListProblemsRequest:
+    properties:
+      page_no:
+        type: integer
+      page_size:
+        type: integer
+    required:
+    - page_no
+    - page_size
+    type: object
+  contract.ListProblemsResponse:
+    properties:
+      base_response:
+        $ref: '#/definitions/contract.BaseResponse'
+      page_info:
+        $ref: '#/definitions/entity.Page'
+      problems:
+        items:
+          $ref: '#/definitions/entity.Problem'
+        type: array
+    type: object
+  contract.ListSubmissionsRequest:
+    properties:
+      language:
+        type: integer
+      page_no:
+        type: integer
+      page_size:
+        type: integer
+      problem_id:
+        type: integer
+      status:
+        type: integer
+      username:
+        type: string
+    required:
+    - page_no
+    - page_size
+    type: object
+  contract.ListSubmissionsResponse:
+    properties:
+      base_response:
+        $ref: '#/definitions/contract.BaseResponse'
+      page_info:
+        $ref: '#/definitions/entity.Page'
+      submissions:
+        items:
+          $ref: '#/definitions/entity.Submission'
+        type: array
+    type: object
   contract.ListUsersRequest:
     properties:
       page_no:
@@ -46,6 +263,139 @@ definitions:
           $ref: '#/definitions/entity.User'
         type: array
     type: object
+  contract.LoginRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  contract.LoginResponse:
+    properties:
+      base_response:
+        $ref: '#/definitions/contract.BaseResponse'
+      user:
+        $ref: '#/definitions/entity.User'
+    type: object
+  contract.ReSubmitCodeRequest:
+    properties:
+      submission_id:
+        type: integer
+    required:
+    - submission_id
+    type: object
+  contract.ReSubmitCodeResponse:
+    properties:
+      base_response:
+        $ref: '#/definitions/contract.BaseResponse'
+    type: object
+  contract.RegisterRequest:
+    properties:
+      user:
+        $ref: '#/definitions/entity.User'
+    required:
+    - user
+    type: object
+  contract.RegisterResponse:
+    properties:
+      base_response:
+        $ref: '#/definitions/contract.BaseResponse'
+      user:
+        $ref: '#/definitions/entity.User'
+    type: object
+  contract.SearchContestRequest:
+    properties:
+      page_no:
+        type: integer
+      page_size:
+        type: integer
+      search_condition:
+        $ref: '#/definitions/entity.ContestSearchCondition'
+    required:
+    - page_no
+    - page_size
+    - search_condition
+    type: object
+  contract.SearchContestResponse:
+    properties:
+      base_response:
+        $ref: '#/definitions/contract.BaseResponse'
+      contests:
+        items:
+          $ref: '#/definitions/entity.Contest'
+        type: array
+      page_info:
+        $ref: '#/definitions/entity.Page'
+    type: object
+  contract.SearchProblemRequest:
+    properties:
+      page_no:
+        type: integer
+      page_size:
+        type: integer
+      search_condition:
+        $ref: '#/definitions/entity.ProblemSearchCondition'
+    required:
+    - page_no
+    - page_size
+    - search_condition
+    type: object
+  contract.SearchProblemResponse:
+    properties:
+      base_response:
+        $ref: '#/definitions/contract.BaseResponse'
+      page_info:
+        $ref: '#/definitions/entity.Page'
+      problems:
+        items:
+          $ref: '#/definitions/entity.Problem'
+        type: array
+    type: object
+  contract.ShowContestRequest:
+    properties:
+      contest_id:
+        type: integer
+    required:
+    - contest_id
+    type: object
+  contract.ShowContestResponse:
+    properties:
+      base_response:
+        $ref: '#/definitions/contract.BaseResponse'
+      contest:
+        $ref: '#/definitions/entity.Contest'
+    type: object
+  contract.ShowProblemRequest:
+    properties:
+      problem_id:
+        type: integer
+    required:
+    - problem_id
+    type: object
+  contract.ShowProblemResponse:
+    properties:
+      base_response:
+        $ref: '#/definitions/contract.BaseResponse'
+      problem:
+        $ref: '#/definitions/entity.Problem'
+    type: object
+  contract.ShowSubmissionCodeRequest:
+    properties:
+      submission_id:
+        type: integer
+    required:
+    - submission_id
+    type: object
+  contract.ShowSubmissionCodeResponse:
+    properties:
+      base_response:
+        $ref: '#/definitions/contract.BaseResponse'
+      submission_code:
+        type: string
+    type: object
   contract.StatusInfo:
     properties:
       message:
@@ -53,12 +403,161 @@ definitions:
       time:
         type: integer
     type: object
+  contract.SubmitCodeRequest:
+    properties:
+      contest_id:
+        type: integer
+      language:
+        type: integer
+      problem_id:
+        type: integer
+      source_code:
+        type: string
+      user_id:
+        type: integer
+    required:
+    - language
+    - problem_id
+    - source_code
+    - user_id
+    type: object
+  contract.SubmitCodeResponse:
+    properties:
+      base_response:
+        $ref: '#/definitions/contract.BaseResponse'
+    type: object
+  contract.UpdateContestRequest:
+    properties:
+      contest_id:
+        type: integer
+      description:
+        type: string
+      end_time:
+        type: integer
+      start_time:
+        type: integer
+      title:
+        type: string
+    required:
+    - contest_id
+    type: object
+  contract.UpdateContestResponse:
+    properties:
+      base_response:
+        $ref: '#/definitions/contract.BaseResponse'
+      contest:
+        $ref: '#/definitions/entity.Contest'
+    type: object
+  contract.UpdateUserInfoRequest:
+    properties:
+      user:
+        $ref: '#/definitions/entity.User'
+      user_id:
+        type: integer
+    required:
+    - user
+    - user_id
+    type: object
+  contract.UpdateUserInfoResponse:
+    properties:
+      base_response:
+        $ref: '#/definitions/contract.BaseResponse'
+      user:
+        $ref: '#/definitions/entity.User'
+    type: object
+  contract.UserInfoRequest:
+    properties:
+      user_id:
+        type: integer
+    required:
+    - user_id
+    type: object
+  contract.UserInfoResponse:
+    properties:
+      base_response:
+        $ref: '#/definitions/contract.BaseResponse'
+      user:
+        $ref: '#/definitions/entity.User'
+    type: object
+  entity.Contest:
+    properties:
+      contest_id:
+        type: integer
+      creator:
+        $ref: '#/definitions/entity.User'
+      description:
+        type: string
+      end_time:
+        type: string
+      problem_ids:
+        items:
+          type: integer
+        type: array
+      problems:
+        items:
+          $ref: '#/definitions/entity.Problem'
+        type: array
+      start_time:
+        type: string
+      status:
+        type: integer
+      title:
+        type: string
+    required:
+    - description
+    - end_time
+    - start_time
+    - title
+    type: object
+  entity.ContestSearchCondition:
+    properties:
+      creator_name:
+        type: string
+      status:
+        type: integer
+      title:
+        type: string
+    type: object
   entity.Page:
     properties:
       total_count:
         type: integer
       total_pages:
         type: integer
+    type: object
+  entity.Problem:
+    properties:
+      accepted:
+        type: integer
+      description:
+        type: string
+      input:
+        type: string
+      memory_limit:
+        type: string
+      output:
+        type: string
+      problem_id:
+        type: integer
+      sample_input:
+        type: string
+      sample_output:
+        type: string
+      submitted:
+        type: integer
+      time_limit:
+        type: string
+      title:
+        type: string
+    type: object
+  entity.ProblemSearchCondition:
+    properties:
+      problem_id:
+        type: integer
+      title:
+        type: string
+    type: object
+  entity.Rank:
     type: object
   entity.Role:
     properties:
@@ -69,6 +568,25 @@ definitions:
     required:
     - role_id
     - role_name
+    type: object
+  entity.Submission:
+    properties:
+      language:
+        type: integer
+      memory_cost:
+        type: integer
+      problem_id:
+        type: integer
+      result:
+        type: integer
+      submission_id:
+        type: integer
+      time_cost:
+        type: integer
+      user_id:
+        type: integer
+      username:
+        type: string
     type: object
   entity.User:
     properties:
@@ -98,6 +616,564 @@ definitions:
 info:
   contact: {}
 paths:
+  /contest/admin/add:
+    post:
+      consumes:
+      - application/json
+      description: 添加比赛管理
+      parameters:
+      - description: Authentication Token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/contract.AddContestAdminRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/contract.AddContestAdminResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/contract.AddContestAdminResponse'
+      summary: 添加比赛管理
+      tags:
+      - contest
+  /contest/admin/delete:
+    delete:
+      consumes:
+      - application/json
+      description: 删除比赛管理
+      parameters:
+      - description: Authentication Token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/contract.DeleteContestAdminRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/contract.DeleteContestAdminResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/contract.DeleteContestAdminResponse'
+      summary: 删除比赛管理
+      tags:
+      - contest
+  /contest/create:
+    post:
+      consumes:
+      - application/json
+      description: 创建比赛
+      parameters:
+      - description: Authentication Token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/contract.CreateContestRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/contract.CreateContestResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/contract.CreateContestResponse'
+      summary: 创建比赛
+      tags:
+      - contest
+  /contest/generate:
+    post:
+      consumes:
+      - application/json
+      description: 生成比赛用户
+      parameters:
+      - description: Authentication Token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/contract.GenerateParticipantsRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/contract.GenerateParticipantsResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/contract.GenerateParticipantsResponse'
+      summary: 生成比赛用户
+      tags:
+      - contest
+  /contest/join:
+    post:
+      consumes:
+      - application/json
+      description: 加入比赛
+      parameters:
+      - description: Authentication Token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/contract.JoinContestRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/contract.JoinContestResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/contract.JoinContestResponse'
+      summary: 加入比赛
+      tags:
+      - contest
+  /contest/list:
+    get:
+      consumes:
+      - application/json
+      description: 比赛列表
+      parameters:
+      - description: Authentication Token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/contract.ListContestsRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/contract.ListContestsResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/contract.ListContestsResponse'
+      summary: 比赛列表
+      tags:
+      - contest
+  /contest/problem/add:
+    post:
+      consumes:
+      - application/json
+      description: 添加比赛题目
+      parameters:
+      - description: Authentication Token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/contract.AddContestProblemRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/contract.AddContestProblemResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/contract.AddContestProblemResponse'
+      summary: 添加比赛题目
+      tags:
+      - contest
+  /contest/problem/delete:
+    delete:
+      consumes:
+      - application/json
+      description: 删除比赛题目
+      parameters:
+      - description: Authentication Token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/contract.DeleteContestProblemRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/contract.DeleteContestProblemResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/contract.DeleteContestProblemResponse'
+      summary: 删除比赛题目
+      tags:
+      - contest
+  /contest/rank:
+    post:
+      consumes:
+      - application/json
+      description: 比赛排名
+      parameters:
+      - description: Authentication Token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/contract.ContestRankRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/contract.ContestRankResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/contract.ContestRankResponse'
+      summary: 比赛排名
+      tags:
+      - contest
+  /contest/search:
+    post:
+      consumes:
+      - application/json
+      description: 比赛搜索
+      parameters:
+      - description: Authentication Token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/contract.SearchContestRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/contract.SearchContestResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/contract.SearchContestResponse'
+      summary: 比赛搜索
+      tags:
+      - contest
+  /contest/show:
+    get:
+      consumes:
+      - application/json
+      description: 比赛详情
+      parameters:
+      - description: Authentication Token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/contract.ShowContestRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/contract.ShowContestResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/contract.ShowContestResponse'
+      summary: 比赛详情
+      tags:
+      - contest
+  /contest/update:
+    post:
+      consumes:
+      - application/json
+      description: 比赛更新
+      parameters:
+      - description: Authentication Token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/contract.UpdateContestRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/contract.UpdateContestResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/contract.UpdateContestResponse'
+      summary: 比赛更新
+      tags:
+      - contest
+  /problem/list:
+    get:
+      consumes:
+      - application/json
+      description: 题目列表
+      parameters:
+      - description: Authentication Token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/contract.ListProblemsRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/contract.ListProblemsResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/contract.ListProblemsResponse'
+      summary: 题目列表
+      tags:
+      - problem
+  /problem/search:
+    post:
+      consumes:
+      - application/json
+      description: 题目搜索
+      parameters:
+      - description: Authentication Token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/contract.SearchProblemRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/contract.SearchProblemResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/contract.SearchProblemResponse'
+      summary: 题目搜索
+      tags:
+      - problem
+  /problem/show:
+    get:
+      consumes:
+      - application/json
+      description: 题目详情
+      parameters:
+      - description: Authentication Token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/contract.ShowProblemRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/contract.ShowProblemResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/contract.ShowProblemResponse'
+      summary: 题目详情
+      tags:
+      - problem
+  /problem/submit:
+    post:
+      consumes:
+      - application/json
+      description: 提交代码
+      parameters:
+      - description: Authentication Token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/contract.SubmitCodeRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/contract.SubmitCodeResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/contract.SubmitCodeResponse'
+      summary: 提交代码
+      tags:
+      - problem
+  /status/list:
+    post:
+      consumes:
+      - application/json
+      description: 查看代码
+      parameters:
+      - description: Authentication Token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/contract.ShowSubmissionCodeRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/contract.ShowSubmissionCodeResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/contract.ShowSubmissionCodeResponse'
+      summary: 查看代码
+      tags:
+      - status
+  /status/reSubmit:
+    post:
+      consumes:
+      - application/json
+      description: 重新提交代码
+      parameters:
+      - description: Authentication Token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/contract.ReSubmitCodeRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/contract.ReSubmitCodeResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/contract.ReSubmitCodeResponse'
+      summary: 重新提交代码
+      tags:
+      - status
   /user/auth:
     post:
       consumes:
@@ -129,6 +1205,68 @@ paths:
       summary: 授权用户
       tags:
       - user
+  /user/delete:
+    delete:
+      consumes:
+      - application/json
+      description: 删除用户
+      parameters:
+      - description: Authentication Token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: delete user request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/contract.DeleteUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/contract.DeleteUserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/contract.DeleteUserResponse'
+      summary: 删除用户
+      tags:
+      - user
+  /user/info:
+    post:
+      consumes:
+      - application/json
+      description: 用户信息
+      parameters:
+      - description: Authentication Token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/contract.UserInfoRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/contract.UserInfoResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/contract.UserInfoResponse'
+      summary: 用户信息
+      tags:
+      - user
   /user/list:
     get:
       consumes:
@@ -158,6 +1296,68 @@ paths:
           schema:
             $ref: '#/definitions/contract.ListUsersResponse'
       summary: 用户列表
+      tags:
+      - user
+  /user/login:
+    post:
+      consumes:
+      - application/json
+      description: 登录
+      parameters:
+      - description: Authentication Token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/contract.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/contract.LoginResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/contract.LoginResponse'
+      summary: 登录
+      tags:
+      - user
+  /user/register:
+    post:
+      consumes:
+      - application/json
+      description: 更新信息
+      parameters:
+      - description: Authentication Token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/contract.UpdateUserInfoRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/contract.UpdateUserInfoResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/contract.UpdateUserInfoResponse'
+      summary: 更新信息
       tags:
       - user
 swagger: "2.0"

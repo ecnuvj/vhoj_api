@@ -24,6 +24,852 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/contest/admin/add": {
+            "post": {
+                "description": "添加比赛管理",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "contest"
+                ],
+                "summary": "添加比赛管理",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authentication Token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/contract.AddContestAdminRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/contract.AddContestAdminResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/contract.AddContestAdminResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/contest/admin/delete": {
+            "delete": {
+                "description": "删除比赛管理",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "contest"
+                ],
+                "summary": "删除比赛管理",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authentication Token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/contract.DeleteContestAdminRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/contract.DeleteContestAdminResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/contract.DeleteContestAdminResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/contest/create": {
+            "post": {
+                "description": "创建比赛",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "contest"
+                ],
+                "summary": "创建比赛",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authentication Token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/contract.CreateContestRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/contract.CreateContestResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/contract.CreateContestResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/contest/generate": {
+            "post": {
+                "description": "生成比赛用户",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "contest"
+                ],
+                "summary": "生成比赛用户",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authentication Token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/contract.GenerateParticipantsRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GenerateParticipantsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/contract.GenerateParticipantsResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/contest/join": {
+            "post": {
+                "description": "加入比赛",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "contest"
+                ],
+                "summary": "加入比赛",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authentication Token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/contract.JoinContestRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/contract.JoinContestResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/contract.JoinContestResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/contest/list": {
+            "get": {
+                "description": "比赛列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "contest"
+                ],
+                "summary": "比赛列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authentication Token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/contract.ListContestsRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/contract.ListContestsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/contract.ListContestsResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/contest/problem/add": {
+            "post": {
+                "description": "添加比赛题目",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "contest"
+                ],
+                "summary": "添加比赛题目",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authentication Token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/contract.AddContestProblemRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/contract.AddContestProblemResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/contract.AddContestProblemResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/contest/problem/delete": {
+            "delete": {
+                "description": "删除比赛题目",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "contest"
+                ],
+                "summary": "删除比赛题目",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authentication Token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/contract.DeleteContestProblemRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/contract.DeleteContestProblemResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/contract.DeleteContestProblemResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/contest/rank": {
+            "post": {
+                "description": "比赛排名",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "contest"
+                ],
+                "summary": "比赛排名",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authentication Token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/contract.ContestRankRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/contract.ContestRankResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/contract.ContestRankResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/contest/search": {
+            "post": {
+                "description": "比赛搜索",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "contest"
+                ],
+                "summary": "比赛搜索",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authentication Token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/contract.SearchContestRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/contract.SearchContestResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/contract.SearchContestResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/contest/show": {
+            "get": {
+                "description": "比赛详情",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "contest"
+                ],
+                "summary": "比赛详情",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authentication Token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/contract.ShowContestRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/contract.ShowContestResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/contract.ShowContestResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/contest/update": {
+            "post": {
+                "description": "比赛更新",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "contest"
+                ],
+                "summary": "比赛更新",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authentication Token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/contract.UpdateContestRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/contract.UpdateContestResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/contract.UpdateContestResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/problem/list": {
+            "get": {
+                "description": "题目列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "problem"
+                ],
+                "summary": "题目列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authentication Token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/contract.ListProblemsRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/contract.ListProblemsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/contract.ListProblemsResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/problem/search": {
+            "post": {
+                "description": "题目搜索",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "problem"
+                ],
+                "summary": "题目搜索",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authentication Token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/contract.SearchProblemRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/contract.SearchProblemResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/contract.SearchProblemResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/problem/show": {
+            "get": {
+                "description": "题目详情",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "problem"
+                ],
+                "summary": "题目详情",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authentication Token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/contract.ShowProblemRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/contract.ShowProblemResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/contract.ShowProblemResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/problem/submit": {
+            "post": {
+                "description": "提交代码",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "problem"
+                ],
+                "summary": "提交代码",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authentication Token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/contract.SubmitCodeRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/contract.SubmitCodeResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/contract.SubmitCodeResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/status/list": {
+            "post": {
+                "description": "查看代码",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "status"
+                ],
+                "summary": "查看代码",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authentication Token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/contract.ShowSubmissionCodeRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/contract.ShowSubmissionCodeResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/contract.ShowSubmissionCodeResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/status/reSubmit": {
+            "post": {
+                "description": "重新提交代码",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "status"
+                ],
+                "summary": "重新提交代码",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authentication Token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/contract.ReSubmitCodeRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/contract.ReSubmitCodeResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/contract.ReSubmitCodeResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/user/auth": {
             "post": {
                 "description": "授权用户",
@@ -66,6 +912,100 @@ var doc = `{
                         "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/contract.AuthUserResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/delete": {
+            "delete": {
+                "description": "删除用户",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "删除用户",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authentication Token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "delete user request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/contract.DeleteUserRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/contract.DeleteUserResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/contract.DeleteUserResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/info": {
+            "post": {
+                "description": "用户信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "用户信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authentication Token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/contract.UserInfoRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/contract.UserInfoResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/contract.UserInfoResponse"
                         }
                     }
                 }
@@ -117,9 +1057,149 @@ var doc = `{
                     }
                 }
             }
+        },
+        "/user/login": {
+            "post": {
+                "description": "登录",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "登录",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authentication Token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/contract.LoginRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/contract.LoginResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/contract.LoginResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/register": {
+            "post": {
+                "description": "更新信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "更新信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authentication Token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/contract.UpdateUserInfoRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/contract.UpdateUserInfoResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/contract.UpdateUserInfoResponse"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "contract.AddContestAdminRequest": {
+            "type": "object",
+            "required": [
+                "contest_id",
+                "user_id"
+            ],
+            "properties": {
+                "contest_id": {
+                    "type": "integer"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "contract.AddContestAdminResponse": {
+            "type": "object",
+            "properties": {
+                "base_response": {
+                    "$ref": "#/definitions/contract.BaseResponse"
+                }
+            }
+        },
+        "contract.AddContestProblemRequest": {
+            "type": "object",
+            "required": [
+                "contest_id",
+                "problem_id"
+            ],
+            "properties": {
+                "contest_id": {
+                    "type": "integer"
+                },
+                "problem_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "contract.AddContestProblemResponse": {
+            "type": "object",
+            "properties": {
+                "base_response": {
+                    "$ref": "#/definitions/contract.BaseResponse"
+                }
+            }
+        },
         "contract.AuthUserRequest": {
             "type": "object",
             "required": [
@@ -160,6 +1240,292 @@ var doc = `{
                 }
             }
         },
+        "contract.ContestRankRequest": {
+            "type": "object",
+            "required": [
+                "contest_id"
+            ],
+            "properties": {
+                "contest_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "contract.ContestRankResponse": {
+            "type": "object",
+            "properties": {
+                "base_response": {
+                    "$ref": "#/definitions/contract.BaseResponse"
+                },
+                "rank": {
+                    "$ref": "#/definitions/entity.Rank"
+                }
+            }
+        },
+        "contract.CreateContestRequest": {
+            "type": "object",
+            "required": [
+                "end_time",
+                "start_time",
+                "title"
+            ],
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "end_time": {
+                    "type": "integer"
+                },
+                "problem_ids": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "start_time": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "contract.CreateContestResponse": {
+            "type": "object",
+            "properties": {
+                "base_response": {
+                    "$ref": "#/definitions/contract.BaseResponse"
+                },
+                "contest": {
+                    "$ref": "#/definitions/entity.Contest"
+                }
+            }
+        },
+        "contract.DeleteContestAdminRequest": {
+            "type": "object",
+            "required": [
+                "contest_id",
+                "user_id"
+            ],
+            "properties": {
+                "contest_id": {
+                    "type": "integer"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "contract.DeleteContestAdminResponse": {
+            "type": "object",
+            "properties": {
+                "base_response": {
+                    "$ref": "#/definitions/contract.BaseResponse"
+                }
+            }
+        },
+        "contract.DeleteContestProblemRequest": {
+            "type": "object",
+            "required": [
+                "contest_id",
+                "problem_id"
+            ],
+            "properties": {
+                "contest_id": {
+                    "type": "integer"
+                },
+                "problem_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "contract.DeleteContestProblemResponse": {
+            "type": "object",
+            "properties": {
+                "base_response": {
+                    "$ref": "#/definitions/contract.BaseResponse"
+                }
+            }
+        },
+        "contract.DeleteUserRequest": {
+            "type": "object",
+            "required": [
+                "user_id"
+            ],
+            "properties": {
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "contract.DeleteUserResponse": {
+            "type": "object",
+            "properties": {
+                "base_response": {
+                    "$ref": "#/definitions/contract.BaseResponse"
+                }
+            }
+        },
+        "contract.GenerateParticipantsRequest": {
+            "type": "object",
+            "required": [
+                "contest_id",
+                "generate_count"
+            ],
+            "properties": {
+                "contest_id": {
+                    "type": "integer"
+                },
+                "generate_count": {
+                    "type": "integer"
+                }
+            }
+        },
+        "contract.GenerateParticipantsResponse": {
+            "type": "object",
+            "properties": {
+                "base_response": {
+                    "$ref": "#/definitions/contract.BaseResponse"
+                },
+                "users": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.User"
+                    }
+                }
+            }
+        },
+        "contract.JoinContestRequest": {
+            "type": "object",
+            "required": [
+                "contest_id",
+                "user_id"
+            ],
+            "properties": {
+                "contest_id": {
+                    "type": "integer"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "contract.JoinContestResponse": {
+            "type": "object",
+            "properties": {
+                "base_response": {
+                    "$ref": "#/definitions/contract.BaseResponse"
+                }
+            }
+        },
+        "contract.ListContestsRequest": {
+            "type": "object",
+            "required": [
+                "page_no",
+                "page_size"
+            ],
+            "properties": {
+                "page_no": {
+                    "type": "integer"
+                },
+                "page_size": {
+                    "type": "integer"
+                }
+            }
+        },
+        "contract.ListContestsResponse": {
+            "type": "object",
+            "properties": {
+                "base_response": {
+                    "$ref": "#/definitions/contract.BaseResponse"
+                },
+                "contests": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.Contest"
+                    }
+                },
+                "page_info": {
+                    "$ref": "#/definitions/entity.Page"
+                }
+            }
+        },
+        "contract.ListProblemsRequest": {
+            "type": "object",
+            "required": [
+                "page_no",
+                "page_size"
+            ],
+            "properties": {
+                "page_no": {
+                    "type": "integer"
+                },
+                "page_size": {
+                    "type": "integer"
+                }
+            }
+        },
+        "contract.ListProblemsResponse": {
+            "type": "object",
+            "properties": {
+                "base_response": {
+                    "$ref": "#/definitions/contract.BaseResponse"
+                },
+                "page_info": {
+                    "$ref": "#/definitions/entity.Page"
+                },
+                "problems": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.Problem"
+                    }
+                }
+            }
+        },
+        "contract.ListSubmissionsRequest": {
+            "type": "object",
+            "required": [
+                "page_no",
+                "page_size"
+            ],
+            "properties": {
+                "language": {
+                    "type": "integer"
+                },
+                "page_no": {
+                    "type": "integer"
+                },
+                "page_size": {
+                    "type": "integer"
+                },
+                "problem_id": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "integer"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "contract.ListSubmissionsResponse": {
+            "type": "object",
+            "properties": {
+                "base_response": {
+                    "$ref": "#/definitions/contract.BaseResponse"
+                },
+                "page_info": {
+                    "$ref": "#/definitions/entity.Page"
+                },
+                "submissions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.Submission"
+                    }
+                }
+            }
+        },
         "contract.ListUsersRequest": {
             "type": "object",
             "required": [
@@ -192,6 +1558,211 @@ var doc = `{
                 }
             }
         },
+        "contract.LoginRequest": {
+            "type": "object",
+            "required": [
+                "password",
+                "username"
+            ],
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "contract.LoginResponse": {
+            "type": "object",
+            "properties": {
+                "base_response": {
+                    "$ref": "#/definitions/contract.BaseResponse"
+                },
+                "user": {
+                    "$ref": "#/definitions/entity.User"
+                }
+            }
+        },
+        "contract.ReSubmitCodeRequest": {
+            "type": "object",
+            "required": [
+                "submission_id"
+            ],
+            "properties": {
+                "submission_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "contract.ReSubmitCodeResponse": {
+            "type": "object",
+            "properties": {
+                "base_response": {
+                    "$ref": "#/definitions/contract.BaseResponse"
+                }
+            }
+        },
+        "contract.RegisterRequest": {
+            "type": "object",
+            "required": [
+                "user"
+            ],
+            "properties": {
+                "user": {
+                    "$ref": "#/definitions/entity.User"
+                }
+            }
+        },
+        "contract.RegisterResponse": {
+            "type": "object",
+            "properties": {
+                "base_response": {
+                    "$ref": "#/definitions/contract.BaseResponse"
+                },
+                "user": {
+                    "$ref": "#/definitions/entity.User"
+                }
+            }
+        },
+        "contract.SearchContestRequest": {
+            "type": "object",
+            "required": [
+                "page_no",
+                "page_size",
+                "search_condition"
+            ],
+            "properties": {
+                "page_no": {
+                    "type": "integer"
+                },
+                "page_size": {
+                    "type": "integer"
+                },
+                "search_condition": {
+                    "$ref": "#/definitions/entity.ContestSearchCondition"
+                }
+            }
+        },
+        "contract.SearchContestResponse": {
+            "type": "object",
+            "properties": {
+                "base_response": {
+                    "$ref": "#/definitions/contract.BaseResponse"
+                },
+                "contests": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.Contest"
+                    }
+                },
+                "page_info": {
+                    "$ref": "#/definitions/entity.Page"
+                }
+            }
+        },
+        "contract.SearchProblemRequest": {
+            "type": "object",
+            "required": [
+                "page_no",
+                "page_size",
+                "search_condition"
+            ],
+            "properties": {
+                "page_no": {
+                    "type": "integer"
+                },
+                "page_size": {
+                    "type": "integer"
+                },
+                "search_condition": {
+                    "$ref": "#/definitions/entity.ProblemSearchCondition"
+                }
+            }
+        },
+        "contract.SearchProblemResponse": {
+            "type": "object",
+            "properties": {
+                "base_response": {
+                    "$ref": "#/definitions/contract.BaseResponse"
+                },
+                "page_info": {
+                    "$ref": "#/definitions/entity.Page"
+                },
+                "problems": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.Problem"
+                    }
+                }
+            }
+        },
+        "contract.ShowContestRequest": {
+            "type": "object",
+            "required": [
+                "contest_id"
+            ],
+            "properties": {
+                "contest_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "contract.ShowContestResponse": {
+            "type": "object",
+            "properties": {
+                "base_response": {
+                    "$ref": "#/definitions/contract.BaseResponse"
+                },
+                "contest": {
+                    "$ref": "#/definitions/entity.Contest"
+                }
+            }
+        },
+        "contract.ShowProblemRequest": {
+            "type": "object",
+            "required": [
+                "problem_id"
+            ],
+            "properties": {
+                "problem_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "contract.ShowProblemResponse": {
+            "type": "object",
+            "properties": {
+                "base_response": {
+                    "$ref": "#/definitions/contract.BaseResponse"
+                },
+                "problem": {
+                    "$ref": "#/definitions/entity.Problem"
+                }
+            }
+        },
+        "contract.ShowSubmissionCodeRequest": {
+            "type": "object",
+            "required": [
+                "submission_id"
+            ],
+            "properties": {
+                "submission_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "contract.ShowSubmissionCodeResponse": {
+            "type": "object",
+            "properties": {
+                "base_response": {
+                    "$ref": "#/definitions/contract.BaseResponse"
+                },
+                "submission_code": {
+                    "type": "string"
+                }
+            }
+        },
         "contract.StatusInfo": {
             "type": "object",
             "properties": {
@@ -200,6 +1771,180 @@ var doc = `{
                 },
                 "time": {
                     "type": "integer"
+                }
+            }
+        },
+        "contract.SubmitCodeRequest": {
+            "type": "object",
+            "required": [
+                "language",
+                "problem_id",
+                "source_code",
+                "user_id"
+            ],
+            "properties": {
+                "contest_id": {
+                    "type": "integer"
+                },
+                "language": {
+                    "type": "integer"
+                },
+                "problem_id": {
+                    "type": "integer"
+                },
+                "source_code": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "contract.SubmitCodeResponse": {
+            "type": "object",
+            "properties": {
+                "base_response": {
+                    "$ref": "#/definitions/contract.BaseResponse"
+                }
+            }
+        },
+        "contract.UpdateContestRequest": {
+            "type": "object",
+            "required": [
+                "contest_id"
+            ],
+            "properties": {
+                "contest_id": {
+                    "type": "integer"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "end_time": {
+                    "type": "integer"
+                },
+                "start_time": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "contract.UpdateContestResponse": {
+            "type": "object",
+            "properties": {
+                "base_response": {
+                    "$ref": "#/definitions/contract.BaseResponse"
+                },
+                "contest": {
+                    "$ref": "#/definitions/entity.Contest"
+                }
+            }
+        },
+        "contract.UpdateUserInfoRequest": {
+            "type": "object",
+            "required": [
+                "user",
+                "user_id"
+            ],
+            "properties": {
+                "user": {
+                    "$ref": "#/definitions/entity.User"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "contract.UpdateUserInfoResponse": {
+            "type": "object",
+            "properties": {
+                "base_response": {
+                    "$ref": "#/definitions/contract.BaseResponse"
+                },
+                "user": {
+                    "$ref": "#/definitions/entity.User"
+                }
+            }
+        },
+        "contract.UserInfoRequest": {
+            "type": "object",
+            "required": [
+                "user_id"
+            ],
+            "properties": {
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "contract.UserInfoResponse": {
+            "type": "object",
+            "properties": {
+                "base_response": {
+                    "$ref": "#/definitions/contract.BaseResponse"
+                },
+                "user": {
+                    "$ref": "#/definitions/entity.User"
+                }
+            }
+        },
+        "entity.Contest": {
+            "type": "object",
+            "required": [
+                "description",
+                "end_time",
+                "start_time",
+                "title"
+            ],
+            "properties": {
+                "contest_id": {
+                    "type": "integer"
+                },
+                "creator": {
+                    "$ref": "#/definitions/entity.User"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "end_time": {
+                    "type": "string"
+                },
+                "problem_ids": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "problems": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.Problem"
+                    }
+                },
+                "start_time": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "entity.ContestSearchCondition": {
+            "type": "object",
+            "properties": {
+                "creator_name": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
                 }
             }
         },
@@ -214,6 +1959,58 @@ var doc = `{
                 }
             }
         },
+        "entity.Problem": {
+            "type": "object",
+            "properties": {
+                "accepted": {
+                    "type": "integer"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "input": {
+                    "type": "string"
+                },
+                "memory_limit": {
+                    "type": "string"
+                },
+                "output": {
+                    "type": "string"
+                },
+                "problem_id": {
+                    "type": "integer"
+                },
+                "sample_input": {
+                    "type": "string"
+                },
+                "sample_output": {
+                    "type": "string"
+                },
+                "submitted": {
+                    "type": "integer"
+                },
+                "time_limit": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "entity.ProblemSearchCondition": {
+            "type": "object",
+            "properties": {
+                "problem_id": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "entity.Rank": {
+            "type": "object"
+        },
         "entity.Role": {
             "type": "object",
             "required": [
@@ -225,6 +2022,35 @@ var doc = `{
                     "type": "integer"
                 },
                 "role_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "entity.Submission": {
+            "type": "object",
+            "properties": {
+                "language": {
+                    "type": "integer"
+                },
+                "memory_cost": {
+                    "type": "integer"
+                },
+                "problem_id": {
+                    "type": "integer"
+                },
+                "result": {
+                    "type": "integer"
+                },
+                "submission_id": {
+                    "type": "integer"
+                },
+                "time_cost": {
+                    "type": "integer"
+                },
+                "user_id": {
+                    "type": "integer"
+                },
+                "username": {
                     "type": "string"
                 }
             }
