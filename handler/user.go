@@ -7,6 +7,7 @@ import (
 	"github.com/ecnuvj/vhoj_api/util"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strconv"
 )
 
 // @Tags user
@@ -108,7 +109,6 @@ func DeleteUser(c *gin.Context) {
 // @Description 登录
 // @Accept  json
 // @Produce json
-// @Param Authorization header string true "Authentication Token"
 // @Param   request body contract.LoginRequest true "request"
 // @Success 200 {object} contract.LoginResponse
 // @Failure 400 {object} contract.LoginResponse
@@ -129,7 +129,7 @@ func Login(c *gin.Context) {
 		return
 	}
 	token, _ := auth.GenerateToken(user)
-	c.SetCookie("token", token, 3600, "/", "localhost", false, true)
+	user.Token = token
 	c.JSON(http.StatusOK, &contract.LoginResponse{
 		User:         user,
 		BaseResponse: util.NewSuccessResponse("login success"),
@@ -141,7 +141,6 @@ func Login(c *gin.Context) {
 // @Description 注册
 // @Accept  json
 // @Produce json
-// @Param Authorization header string true "Authentication Token"
 // @Param   request body contract.RegisterRequest true "request"
 // @Success 200 {object} contract.RegisterResponse
 // @Failure 400 {object} contract.RegisterResponse
@@ -185,6 +184,23 @@ func UpdateUserInfo(c *gin.Context) {
 		})
 		return
 	}
+	//str, _ := json.Marshal(request.User)
+	//fmt.Println(string(str))
+	//return
+	token, exist := c.Get("auth")
+	if !exist {
+		c.JSON(http.StatusUnauthorized, &contract.UserInfoResponse{
+			BaseResponse: util.NewFailureResponse("auth token not exist"),
+		})
+		return
+	}
+	claims := token.(*auth.Claims)
+	if claims.UserId != strconv.Itoa(int(request.UserId)) {
+		c.JSON(http.StatusUnauthorized, &contract.UserInfoResponse{
+			BaseResponse: util.NewFailureResponse("token not match"),
+		})
+		return
+	}
 	user, err := service.UserService.UpdateUserInfo(request.UserId, request.User)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, &contract.UpdateUserInfoResponse{
@@ -192,6 +208,8 @@ func UpdateUserInfo(c *gin.Context) {
 		})
 		return
 	}
+	authToken, _ := auth.GenerateToken(user)
+	user.Token = authToken
 	c.JSON(http.StatusOK, &contract.UpdateUserInfoResponse{
 		User:         user,
 		BaseResponse: util.NewSuccessResponse("update success"),
@@ -216,13 +234,24 @@ func UserInfo(c *gin.Context) {
 		})
 		return
 	}
-	user, err := service.UserService.GetUserById(request.UserId)
+	token, exist := c.Get("auth")
+	if !exist {
+		c.JSON(http.StatusUnauthorized, &contract.UserInfoResponse{
+			BaseResponse: util.NewFailureResponse("auth token not exist"),
+		})
+		return
+	}
+	claims := token.(*auth.Claims)
+	userId, _ := strconv.Atoi(claims.UserId)
+	user, err := service.UserService.GetUserById(uint(userId))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, &contract.UserInfoResponse{
 			BaseResponse: util.NewFailureResponse("service error: %v", err),
 		})
 		return
 	}
+	authToken, _ := auth.GenerateToken(user)
+	user.Token = authToken
 	c.JSON(http.StatusOK, &contract.UserInfoResponse{
 		User:         user,
 		BaseResponse: util.NewSuccessResponse("success"),

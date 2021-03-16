@@ -25,14 +25,10 @@ func Cors() gin.HandlerFunc {
 
 func Auth() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		token, err := c.Cookie("token")
-		if err != nil {
-			if err == http.ErrNoCookie {
-				//abort保证被挂起的函数不会被调用，但不会退出当前函数
-				c.AbortWithStatus(http.StatusUnauthorized)
-				return
-			}
-			c.AbortWithStatus(http.StatusBadRequest)
+		token := c.GetHeader("Authorization")
+		if token == "" {
+			//abort保证被挂起的函数不会被调用，但不会退出当前函数
+			c.AbortWithStatus(http.StatusUnauthorized)
 			return
 		}
 		claims, err := auth.ParseToken(token)

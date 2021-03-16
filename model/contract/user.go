@@ -42,7 +42,7 @@ type LoginResponse struct {
 }
 
 type RegisterRequest struct {
-	User *entity.User `json:"user" form:"user" binding:"required"`
+	User *entity.RegisterUserInfo `json:"user" form:"user" binding:"required"`
 }
 
 type RegisterResponse struct {
@@ -61,7 +61,6 @@ type UpdateUserInfoResponse struct {
 }
 
 type UserInfoRequest struct {
-	UserId uint `json:"user_id" form:"user_id" binding:"required"`
 }
 
 type UserInfoResponse struct {

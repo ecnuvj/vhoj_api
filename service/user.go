@@ -12,7 +12,7 @@ import (
 
 type IUserService interface {
 	Login(string, string) (*entity.User, error)
-	Register(*entity.User) (*entity.User, error)
+	Register(info *entity.RegisterUserInfo) (*entity.User, error)
 	UpdateUserInfo(uint, *entity.User) (*entity.User, error)
 	AuthUser(uint, []*entity.Role) (*entity.User, error)
 	ListUsers(int32, int32) ([]*entity.User, *entity.Page, error)
@@ -40,7 +40,7 @@ func (u *UserServiceImpl) Login(username string, password string) (*entity.User,
 	return adapter.RpcUserToEntityUser(resp.User), nil
 }
 
-func (u *UserServiceImpl) Register(user *entity.User) (*entity.User, error) {
+func (u *UserServiceImpl) Register(user *entity.RegisterUserInfo) (*entity.User, error) {
 	request := &userpb.RegisterRequest{
 		User: &userpb.User{
 			Username: user.Username,
