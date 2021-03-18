@@ -27,10 +27,10 @@ func Init() {
 
 	problem := router.Group("/problem")
 	{
-		problem.POST("/list", handler.ListProblems)
+		problem.POST("/list", middleware.Auth(), handler.ListProblems)
 		problem.GET("/show", handler.ShowProblem)
 		problem.POST("/submit", middleware.Auth(), handler.SubmitCode)
-		problem.POST("/search", handler.SearchProblem)
+		problem.POST("/search", middleware.Auth(), handler.SearchProblem)
 	}
 
 	contest := router.Group("/contest")

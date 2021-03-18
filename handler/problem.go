@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"github.com/ecnuvj/vhoj_api/auth"
 	"github.com/ecnuvj/vhoj_api/model/contract"
 	"github.com/ecnuvj/vhoj_api/model/entity"
 	"github.com/ecnuvj/vhoj_api/service"
@@ -108,6 +109,11 @@ func SearchProblem(c *gin.Context) {
 		Title:     request.Title,
 		ProblemId: uint(problemId),
 	})
+	token, exist := c.Get("auth")
+	if exist {
+		userId, _ := util.StringToNumber(token.(*auth.Claims).UserId)
+		problems, _ = service.ProblemService.CheckUserProblemsStatus(problems, uint(userId), 0)
+	}
 	if err != nil {
 		c.JSON(http.StatusBadRequest, &contract.SearchProblemResponse{
 			BaseResponse: util.NewFailureResponse("service error: %v", err),
@@ -119,14 +125,4 @@ func SearchProblem(c *gin.Context) {
 		PageInfo:     pageInfo,
 		Problems:     problems,
 	})
-}
-
-func CheckUserProblemStatus(c *gin.Context) {
-	request := &contract.CheckUserProblemStatusRequest{}
-	if err := c.ShouldBindJSON(request); err != nil {
-		c.JSON(http.StatusBadRequest, &contract.CheckUserProblemStatusResponse{
-			BaseResponse: util.NewFailureResponse("param error: %v", err),
-		})
-		return
-	}
 }
