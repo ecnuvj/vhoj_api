@@ -1,12 +1,16 @@
 package handler
 
 import (
+	"github.com/ecnuvj/vhoj_api/auth"
 	"github.com/ecnuvj/vhoj_api/model/contract"
 	"github.com/ecnuvj/vhoj_api/model/entity"
 	"github.com/ecnuvj/vhoj_api/service"
 	"github.com/ecnuvj/vhoj_api/util"
+	"github.com/ecnuvj/vhoj_common/pkg/common/constants/language"
+	"github.com/ecnuvj/vhoj_common/pkg/common/constants/status_type"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strconv"
 )
 
 // @Tags problem
@@ -27,7 +31,45 @@ func SubmitCode(c *gin.Context) {
 		})
 		return
 	}
-	submitId, err := service.SubmitService.SubmitCode(request)
+	problemId, err := util.StringToNumber(request.ProblemId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, &contract.SubmitCodeResponse{
+			BaseResponse: util.NewFailureResponse("request param error, err: %v", err),
+		})
+		return
+	}
+	lang, err := util.StringToNumber(request.Language)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, &contract.SubmitCodeResponse{
+			BaseResponse: util.NewFailureResponse("request param error, err: %v", err),
+		})
+		return
+	}
+	contestId, err := util.StringToNumber(request.ContestId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, &contract.SubmitCodeResponse{
+			BaseResponse: util.NewFailureResponse("request param error, err: %v", err),
+		})
+		return
+	}
+	token, exist := c.Get("auth")
+	if !exist {
+		c.JSON(http.StatusUnauthorized, &contract.UserInfoResponse{
+			BaseResponse: util.NewFailureResponse("auth token not exist"),
+		})
+		return
+	}
+	claims := token.(*auth.Claims)
+	userId, _ := strconv.Atoi(claims.UserId)
+	param := &service.SubmitCodeParam{
+		ProblemId:  uint64(problemId),
+		UserId:     uint64(userId),
+		Username:   claims.Username,
+		Language:   int32(lang),
+		ContestId:  uint64(contestId),
+		SourceCode: request.SourceCode,
+	}
+	submitId, err := service.SubmitService.SubmitCode(param)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, &contract.SubmitCodeResponse{
 			BaseResponse: util.NewFailureResponse("submit code error: %v", err),
@@ -93,11 +135,32 @@ func ListSubmissions(c *gin.Context) {
 		})
 		return
 	}
+	problemId, err := util.StringToNumber(request.ProblemId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, &contract.ListSubmissionsResponse{
+			BaseResponse: util.NewFailureResponse("request param error, err: %v", err),
+		})
+		return
+	}
+	status, err := util.StringToNumber(request.Status)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, &contract.ListSubmissionsResponse{
+			BaseResponse: util.NewFailureResponse("request param error, err: %v", err),
+		})
+		return
+	}
+	lang, err := util.StringToNumber(request.Language)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, &contract.ListSubmissionsResponse{
+			BaseResponse: util.NewFailureResponse("request param error, err: %v", err),
+		})
+		return
+	}
 	submissions, pageInfo, err := service.SubmitService.ListSubmission(request.PageNo, request.PageSize, &entity.SubmissionSearchCondition{
 		Username:  request.Username,
-		ProblemId: request.ProblemId,
-		Status:    request.Status,
-		Language:  request.Language,
+		ProblemId: uint(problemId),
+		Status:    status_type.SubmissionStatusType(status),
+		Language:  language.Language(lang),
 	})
 	if err != nil {
 		c.JSON(http.StatusBadRequest, &contract.ListSubmissionsResponse{

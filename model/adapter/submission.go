@@ -11,15 +11,24 @@ func RpcSubmissionToEntitySubmission(submission *submitterpb.Submission) *entity
 	if submission == nil {
 		return &entity.Submission{}
 	}
+	result := entity.SubmissionResult{
+		Code: status_type.SubmissionStatusType(submission.Result),
+		Text: status_type.CodeToTextMap[status_type.SubmissionStatusType(submission.Result)],
+	}
+	lang := entity.SubmissionLanguage{
+		Code: language.Language(submission.Language),
+		Text: language.CodeToTextMap[language.Language(submission.Language)],
+	}
 	return &entity.Submission{
 		SubmissionId: uint(submission.SubmissionId),
 		Username:     submission.Username,
 		ProblemId:    uint(submission.ProblemId),
 		UserId:       uint(submission.UserId),
-		Result:       status_type.SubmissionStatusType(submission.Result),
+		Result:       result,
 		TimeCost:     submission.TimeCost,
 		MemoryCost:   submission.MemoryCost,
-		Language:     language.Language(submission.Language),
+		Language:     lang,
+		SubmitTime:   submission.SubmitTime.AsTime(),
 	}
 }
 

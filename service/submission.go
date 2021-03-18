@@ -4,15 +4,23 @@ import (
 	"context"
 	"fmt"
 	"github.com/ecnuvj/vhoj_api/model/adapter"
-	"github.com/ecnuvj/vhoj_api/model/contract"
 	"github.com/ecnuvj/vhoj_api/model/entity"
 	"github.com/ecnuvj/vhoj_rpc/client/rpc_submitter"
 	"github.com/ecnuvj/vhoj_rpc/model/base"
 	"github.com/ecnuvj/vhoj_rpc/model/submitterpb"
 )
 
+type SubmitCodeParam struct {
+	ProblemId  uint64
+	UserId     uint64
+	Username   string
+	Language   int32
+	ContestId  uint64
+	SourceCode string
+}
+
 type ISubmitService interface {
-	SubmitCode(*contract.SubmitCodeRequest) (uint, error)
+	SubmitCode(*SubmitCodeParam) (uint, error)
 	ReSubmitCode(uint) error
 	ListSubmission(int32, int32, *entity.SubmissionSearchCondition) ([]*entity.Submission, *entity.Page, error)
 	GetSubmissionCode(uint) (string, error)
@@ -22,14 +30,14 @@ var SubmitService ISubmitService = &SubmitServiceImpl{}
 
 type SubmitServiceImpl struct{}
 
-func (s *SubmitServiceImpl) SubmitCode(req *contract.SubmitCodeRequest) (uint, error) {
+func (s *SubmitServiceImpl) SubmitCode(param *SubmitCodeParam) (uint, error) {
 	request := &submitterpb.SubmitCodeRequest{
-		ProblemId: uint64(req.ProblemId),
-		UserId:    uint64(req.UserId),
-		//todo add username
-		Language:   req.Language,
-		ContestId:  uint64(req.ContestId),
-		SourceCode: req.SourceCode,
+		ProblemId:  param.ProblemId,
+		UserId:     param.UserId,
+		Username:   param.Username,
+		Language:   param.Language,
+		ContestId:  param.ContestId,
+		SourceCode: param.SourceCode,
 	}
 	resp, err := rpc_submitter.SubmitServiceClient.SubmitCode(context.Background(), request)
 	if err != nil {

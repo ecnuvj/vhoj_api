@@ -2,6 +2,7 @@ package handler
 
 import (
 	"github.com/ecnuvj/vhoj_api/model/contract"
+	"github.com/ecnuvj/vhoj_api/model/entity"
 	"github.com/ecnuvj/vhoj_api/service"
 	"github.com/ecnuvj/vhoj_api/util"
 	"github.com/gin-gonic/gin"
@@ -17,7 +18,7 @@ import (
 // @Param   request body contract.ListProblemsRequest true "request"
 // @Success 200 {object} contract.ListProblemsResponse
 // @Failure 400 {object} contract.ListProblemsResponse
-// @Router /problem/list [get]
+// @Router /problem/list [post]
 func ListProblems(c *gin.Context) {
 	request := &contract.ListProblemsRequest{}
 	if err := c.ShouldBindJSON(request); err != nil {
@@ -52,13 +53,20 @@ func ListProblems(c *gin.Context) {
 // @Router /problem/show [get]
 func ShowProblem(c *gin.Context) {
 	request := &contract.ShowProblemRequest{}
-	if err := c.ShouldBindJSON(request); err != nil {
+	if err := c.ShouldBindQuery(request); err != nil {
 		c.JSON(http.StatusBadRequest, &contract.ShowProblemResponse{
 			BaseResponse: util.NewFailureResponse("param error: %v", err),
 		})
 		return
 	}
-	problem, err := service.ProblemService.ShowProblem(request.ProblemId)
+	problemId, err := util.StringToNumber(request.ProblemId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, &contract.ShowProblemResponse{
+			BaseResponse: util.NewFailureResponse("param error: %v", err),
+		})
+		return
+	}
+	problem, err := service.ProblemService.ShowProblem(uint(problemId))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, &contract.ShowProblemResponse{
 			BaseResponse: util.NewFailureResponse("service error: %v", err),
@@ -89,7 +97,17 @@ func SearchProblem(c *gin.Context) {
 		})
 		return
 	}
-	problems, pageInfo, err := service.ProblemService.SearchProblem(request.PageNo, request.PageSize, request.SearchCondition)
+	problemId, err := util.StringToNumber(request.ProblemId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, &contract.SearchProblemResponse{
+			BaseResponse: util.NewFailureResponse("param error: %v", err),
+		})
+		return
+	}
+	problems, pageInfo, err := service.ProblemService.SearchProblem(request.PageNo, request.PageSize, &entity.ProblemSearchCondition{
+		Title:     request.Title,
+		ProblemId: uint(problemId),
+	})
 	if err != nil {
 		c.JSON(http.StatusBadRequest, &contract.SearchProblemResponse{
 			BaseResponse: util.NewFailureResponse("service error: %v", err),

@@ -17,7 +17,7 @@ type ListProblemsResponse struct {
 }
 
 type ShowProblemRequest struct {
-	ProblemId uint `json:"problem_id" form:"problem_id" binding:"required"`
+	ProblemId string `json:"problem_id" form:"problem_id" binding:"required"`
 }
 
 type ShowProblemResponse struct {
@@ -26,9 +26,10 @@ type ShowProblemResponse struct {
 }
 
 type SearchProblemRequest struct {
-	SearchCondition *entity.ProblemSearchCondition `json:"search_condition" form:"search_condition" binding:"required"`
-	PageNo          int32                          `json:"page_no" form:"page_no" binding:"required"`
-	PageSize        int32                          `json:"page_size" form:"page_size" binding:"required"`
+	Title     string `json:"title" form:"title"`
+	ProblemId string `json:"problem_id" form:"problem_id"`
+	PageNo    int32  `json:"page_no" form:"page_no" binding:"required"`
+	PageSize  int32  `json:"page_size" form:"page_size" binding:"required"`
 }
 
 type SearchProblemResponse struct {

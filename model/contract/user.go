@@ -67,3 +67,11 @@ type UserInfoResponse struct {
 	User         *entity.User  `json:"user"`
 	BaseResponse *BaseResponse `json:"base_response"`
 }
+
+type RoleListRequest struct {
+}
+
+type RoleListResponse struct {
+	Roles        []*entity.Role `json:"roles"`
+	BaseResponse *BaseResponse  `json:"base_response"`
+}

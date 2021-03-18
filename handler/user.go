@@ -257,3 +257,24 @@ func UserInfo(c *gin.Context) {
 		BaseResponse: util.NewSuccessResponse("success"),
 	})
 }
+
+func RoleList(c *gin.Context) {
+	request := &contract.RoleListRequest{}
+	if err := c.ShouldBindQuery(request); err != nil {
+		c.JSON(http.StatusBadRequest, &contract.RoleListResponse{
+			BaseResponse: util.NewFailureResponse("request param error, err: %v", err),
+		})
+		return
+	}
+	roles, err := service.UserService.GetRoleList()
+	if err != nil {
+		c.JSON(http.StatusBadRequest, &contract.RoleListResponse{
+			BaseResponse: util.NewFailureResponse("service error: %v", err),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, &contract.RoleListResponse{
+		Roles:        roles,
+		BaseResponse: util.NewSuccessResponse("success"),
+	})
+}

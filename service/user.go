@@ -19,6 +19,7 @@ type IUserService interface {
 	DeleteUser(uint) error
 	GetUserById(uint) (*entity.User, error)
 	GetUserByUsername(string) (*entity.User, error)
+	GetRoleList() ([]*entity.Role, error)
 }
 
 var UserService IUserService = &UserServiceImpl{}
@@ -148,4 +149,16 @@ func (u *UserServiceImpl) GetUserByUsername(username string) (*entity.User, erro
 		return nil, fmt.Errorf("resp error: %v", resp.BaseResponse.Message)
 	}
 	return adapter.RpcUserToEntityUser(resp.User), nil
+}
+
+func (u *UserServiceImpl) GetRoleList() ([]*entity.Role, error) {
+	request := &userpb.GetRoleListRequest{}
+	resp, err := rpc_user.UserServiceClient.GetRoleList(context.Background(), request)
+	if err != nil {
+		return nil, err
+	}
+	if resp.BaseResponse.Status != base.REPLY_STATUS_SUCCESS {
+		return nil, fmt.Errorf("resp error: %v", resp.BaseResponse.Message)
+	}
+	return adapter.RpcRolesToEntityRoles(resp.Roles), nil
 }

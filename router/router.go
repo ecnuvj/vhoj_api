@@ -20,13 +20,14 @@ func Init() {
 		user.POST("/update", middleware.Auth(), handler.UpdateUserInfo)
 		user.POST("/info", middleware.Auth(), handler.UserInfo)
 		user.POST("/auth", middleware.Auth(), middleware.RoleCheck("admin"), handler.AuthUser)
-		user.GET("/list", middleware.Auth(), middleware.RoleCheck("admin"), handler.ListUsers)
+		user.POST("/list", middleware.Auth(), middleware.RoleCheck("admin"), handler.ListUsers)
 		user.DELETE("/delete", middleware.Auth(), middleware.RoleCheck("admin"), handler.DeleteUser)
+		user.GET("/roles", handler.RoleList)
 	}
 
 	problem := router.Group("/problem")
 	{
-		problem.GET("/list", handler.ListProblems)
+		problem.POST("/list", handler.ListProblems)
 		problem.GET("/show", handler.ShowProblem)
 		problem.POST("/submit", middleware.Auth(), handler.SubmitCode)
 		problem.POST("/search", handler.SearchProblem)

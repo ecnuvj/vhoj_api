@@ -2,17 +2,14 @@ package contract
 
 import (
 	"github.com/ecnuvj/vhoj_api/model/entity"
-	"github.com/ecnuvj/vhoj_common/pkg/common/constants/language"
-	"github.com/ecnuvj/vhoj_common/pkg/common/constants/status_type"
 	"github.com/ecnuvj/vhoj_common/pkg/common/constants/submission_status"
 )
 
 type SubmitCodeRequest struct {
-	UserId     uint   `form:"user_id" json:"user_id" binding:"required"`
-	ProblemId  uint   `form:"problem_id" json:"problem_id" binding:"required"`
-	ContestId  uint   `form:"contest_id" json:"contest_id"`
+	ProblemId  string `form:"problem_id" json:"problem_id" binding:"required"`
+	ContestId  string `form:"contest_id" json:"contest_id"`
 	SourceCode string `form:"source_code" json:"source_code" binding:"required"`
-	Language   int32  `form:"language" json:"language" binding:"required"`
+	Language   string `form:"language" json:"language" binding:"required"`
 }
 
 type SubmitCodeResponse struct {
@@ -28,12 +25,12 @@ type ReSubmitCodeResponse struct {
 }
 
 type ListSubmissionsRequest struct {
-	Username  string                           `json:"username" form:"username"`
-	ProblemId uint                             `json:"problem_id" form:"problem_id"`
-	Status    status_type.SubmissionStatusType `json:"status" form:"status"`
-	Language  language.Language                `json:"language" form:"language"`
-	PageNo    int32                            `json:"page_no" form:"page_no" binding:"required"`
-	PageSize  int32                            `json:"page_size" form:"page_size" binding:"required"`
+	Username  string `json:"username" form:"username"`
+	ProblemId string `json:"problem_id" form:"problem_id"`
+	Status    string `json:"status" form:"status"`
+	Language  string `json:"language" form:"language"`
+	PageNo    int32  `json:"page_no" form:"page_no" binding:"required"`
+	PageSize  int32  `json:"page_size" form:"page_size" binding:"required"`
 }
 
 type ListSubmissionsResponse struct {
