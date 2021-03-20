@@ -57,7 +57,7 @@ func RpcContestToEntityContest(contest *problempb.Contest) *entity.Contest {
 		ProblemIds:   problemIds,
 		Problems:     RpcContestProblemsToEntityContestProblems(contest.Problems),
 		Status:       status,
-		ProblemCount: len(problemIds),
+		ProblemCount: len(contest.Problems),
 	}
 }
 

@@ -460,3 +460,27 @@ func UpdateContestProblems(c *gin.Context) {
 		BaseResponse: util.NewSuccessResponse("success"),
 	})
 }
+
+func GetUserContests(c *gin.Context) {
+	request := &contract.GetUserContestsRequest{}
+	if err := c.ShouldBindJSON(request); err != nil {
+		c.JSON(http.StatusBadRequest, &contract.GetUserContestsResponse{
+			BaseResponse: util.NewFailureResponse("param error: %v", err),
+		})
+		return
+	}
+	token, _ := c.Get("auth")
+	userId, _ := util.StringToNumber(token.(*auth.Claims).UserId)
+	contests, pageInfo, err := service.ContestService.GetUserContests(uint(userId), request.PageNo, request.PageSize)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, &contract.GetUserContestsResponse{
+			BaseResponse: util.NewFailureResponse("service error: %v", err),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, &contract.GetUserContestsResponse{
+		Contests:     contests,
+		PageInfo:     pageInfo,
+		BaseResponse: util.NewSuccessResponse("success"),
+	})
+}

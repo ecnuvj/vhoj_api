@@ -49,6 +49,7 @@ func Init() {
 		contest.POST("/update", middleware.Auth(), handler.UpdateContest)
 		contest.POST("/generate", middleware.Auth(), handler.GenerateParticipants)
 		contest.POST("/rank", middleware.Auth(), handler.ContestRank)
+		contest.POST("/user", middleware.Auth(), handler.GetUserContests)
 	}
 
 	status := router.Group("/status")

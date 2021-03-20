@@ -24,6 +24,7 @@ type IContestService interface {
 	GenerateParticipants(uint, int32) ([]*entity.User, error)
 	ContestRank(uint) (*entity.Rank, error)
 	UpdateContestProblems(uint, []*entity.ContestProblem) ([]*entity.ContestProblem, error)
+	GetUserContests(userId uint, pageNo int32, pageSize int32) ([]*entity.Contest, *entity.Page, error)
 }
 
 var ContestService IContestService = &ContestServiceImpl{}
@@ -42,7 +43,9 @@ func (c *ContestServiceImpl) CreateContest(contest *entity.Contest) (*entity.Con
 	if resp.BaseResponse.Status != base.REPLY_STATUS_SUCCESS {
 		return nil, fmt.Errorf("resp error: %v", resp.BaseResponse.Message)
 	}
-	return adapter.RpcContestToEntityContest(resp.Contest), nil
+	retContest := adapter.RpcContestToEntityContest(resp.Contest)
+	retContest.ProblemCount = len(retContest.Problems)
+	return retContest, nil
 }
 
 func (c *ContestServiceImpl) ListContests(pageNo int32, pageSize int32) ([]*entity.Contest, *entity.Page, error) {
@@ -234,4 +237,23 @@ func (c *ContestServiceImpl) UpdateContestProblems(contestId uint, problems []*e
 		return nil, fmt.Errorf("resp error: %v", resp.BaseResponse.Message)
 	}
 	return adapter.RpcContestProblemsToEntityContestProblems(resp.ContestProblems), nil
+}
+
+func (c *ContestServiceImpl) GetUserContests(userId uint, pageNo int32, pageSize int32) ([]*entity.Contest, *entity.Page, error) {
+	request := &problempb.GetUserContestsRequest{
+		UserId:   uint64(userId),
+		PageNo:   pageNo,
+		PageSize: pageSize,
+	}
+	resp, err := rpc_problem.ProblemServiceClient.GetUserContests(context.Background(), request)
+	if err != nil {
+		return nil, nil, err
+	}
+	if resp.BaseResponse.Status != base.REPLY_STATUS_SUCCESS {
+		return nil, nil, fmt.Errorf("resp error: %v", resp.BaseResponse.Message)
+	}
+	return adapter.RpcContestsToEntityContests(resp.Contests), &entity.Page{
+		TotalCount: resp.TotalCount,
+		TotalPages: resp.TotalPages,
+	}, nil
 }

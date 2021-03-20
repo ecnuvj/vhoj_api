@@ -23,6 +23,7 @@ func Cors() gin.HandlerFunc {
 	}
 }
 
+//todo try auth
 func Auth() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		token := c.GetHeader("Authorization")

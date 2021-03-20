@@ -135,3 +135,14 @@ type UpdateContestProblemsResponse struct {
 	Problems     []*entity.ContestProblem `json:"problems"`
 	BaseResponse *BaseResponse            `json:"base_response"`
 }
+
+type GetUserContestsRequest struct {
+	PageNo   int32 `json:"page_no" form:"page_no" binding:"required"`
+	PageSize int32 `json:"page_size" form:"page_size" binding:"required"`
+}
+
+type GetUserContestsResponse struct {
+	Contests     []*entity.Contest `json:"contests" form:"contests"`
+	PageInfo     *entity.Page      `json:"page_info"`
+	BaseResponse *BaseResponse     `json:"base_response"`
+}
