@@ -35,12 +35,14 @@ func Init() {
 
 	contest := router.Group("/contest")
 	{
-		contest.POST("/create", middleware.Auth(), middleware.RoleCheck("creator"), handler.CreateContest)
+		//todo create contest auth
+		contest.POST("/create", middleware.Auth(), handler.CreateContest)
 		contest.GET("/list", handler.ListContests)
 		contest.GET("/show", middleware.Auth(), handler.ShowContest)
 		contest.POST("/search", handler.SearchContest)
 		contest.POST("/problem/add", middleware.Auth(), handler.AddContestProblem)
 		contest.DELETE("/problem/delete", middleware.Auth(), handler.DeleteContestProblem)
+		contest.POST("/problems/update", middleware.Auth(), handler.UpdateContestProblems)
 		contest.POST("/admin/add", middleware.Auth(), handler.AddContestAdmin)
 		contest.DELETE("/admin/delete", middleware.Auth(), handler.DeleteContestAdmin)
 		contest.POST("/join", middleware.Auth(), handler.JoinContest)
@@ -52,7 +54,7 @@ func Init() {
 	status := router.Group("/status")
 	{
 		status.POST("/list", handler.ListSubmissions)
-		status.POST("/showCode", middleware.Auth(), middleware.RoleCheck("reviewer"), handler.ShowSubmissionCode)
+		status.POST("/showCode", middleware.Auth(), handler.ShowSubmissionCode)
 		status.POST("/reSubmit", middleware.Auth(), handler.ReSubmitCode)
 	}
 

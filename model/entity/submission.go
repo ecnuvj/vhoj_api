@@ -16,6 +16,7 @@ type Submission struct {
 	MemoryCost   int64              `json:"memory_cost"`
 	Language     SubmissionLanguage `json:"language"`
 	SubmitTime   time.Time          `json:"submit_time"`
+	Code         string             `json:"code"`
 }
 
 type SubmissionResult struct {

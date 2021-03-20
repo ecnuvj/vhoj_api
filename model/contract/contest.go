@@ -5,11 +5,11 @@ import (
 )
 
 type CreateContestRequest struct {
-	Title       string `json:"title" form:"title" binding:"required"`
-	Description string `json:"description" form:"description"`
-	StartTime   int64  `json:"start_time" time_format:"unix" form:"start_time"  binding:"required"`
-	EndTime     int64  `json:"end_time" time_format:"unix" form:"end_time" binding:"required"`
-	ProblemIds  []uint `json:"problem_ids" form:"problem_ids"`
+	Title       string                   `json:"title" form:"title" binding:"required"`
+	Description string                   `json:"description" form:"description"`
+	StartTime   int64                    `json:"start_time" time_format:"unix" form:"start_time"  binding:"required"`
+	EndTime     int64                    `json:"end_time" time_format:"unix" form:"end_time" binding:"required"`
+	Problems    []*entity.ContestProblem `json:"problems" form:"problems"`
 }
 
 type CreateContestResponse struct {
@@ -118,10 +118,20 @@ type GenerateParticipantsResponse struct {
 }
 
 type ContestRankRequest struct {
-	ContestId uint `json:"contest_id" form:"contest_id" binding:"required"`
+	ContestId string `json:"contest_id" form:"contest_id" binding:"required"`
 }
 
 type ContestRankResponse struct {
 	Rank         *entity.Rank  `json:"rank"`
 	BaseResponse *BaseResponse `json:"base_response"`
+}
+
+type UpdateContestProblemsRequest struct {
+	ContestId string                   `json:"contest_id" form:"contest_id" binding:"required"`
+	Problems  []*entity.ContestProblem `json:"problems" form:"problems" binding:"required"`
+}
+
+type UpdateContestProblemsResponse struct {
+	Problems     []*entity.ContestProblem `json:"problems"`
+	BaseResponse *BaseResponse            `json:"base_response"`
 }

@@ -23,7 +23,7 @@ type ISubmitService interface {
 	SubmitCode(*SubmitCodeParam) (uint, error)
 	ReSubmitCode(uint) error
 	ListSubmission(int32, int32, *entity.SubmissionSearchCondition) ([]*entity.Submission, *entity.Page, error)
-	GetSubmissionCode(uint) (string, error)
+	GetSubmission(uint) (*entity.Submission, error)
 }
 
 var SubmitService ISubmitService = &SubmitServiceImpl{}
@@ -82,22 +82,22 @@ func (s *SubmitServiceImpl) ListSubmission(pageNo int32, pageSize int32, conditi
 	if resp.BaseResponse.Status != base.REPLY_STATUS_SUCCESS {
 		return nil, nil, fmt.Errorf("resp error: %v", resp.BaseResponse.Message)
 	}
-	return adapter.RpcSubmissionsToEntitySubmissions(resp.Submissions), &entity.Page{
+	return adapter.RpcSubmissionsToEntitySubmissions(resp.Submissions, false), &entity.Page{
 		TotalCount: resp.TotalCount,
 		TotalPages: resp.TotalPages,
 	}, nil
 }
 
-func (s *SubmitServiceImpl) GetSubmissionCode(submissionId uint) (string, error) {
+func (s *SubmitServiceImpl) GetSubmission(submissionId uint) (*entity.Submission, error) {
 	request := &submitterpb.GetSubmissionRequest{
 		SubmissionId: uint64(submissionId),
 	}
 	resp, err := rpc_submitter.SubmitServiceClient.GetSubmission(context.Background(), request)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 	if resp.BaseResponse.Status != base.REPLY_STATUS_SUCCESS {
-		return "", fmt.Errorf("resp error: %v", resp.BaseResponse.Message)
+		return nil, fmt.Errorf("resp error: %v", resp.BaseResponse.Message)
 	}
-	return resp.Submission.Code, nil
+	return adapter.RpcSubmissionToEntitySubmission(resp.Submission, true), nil
 }

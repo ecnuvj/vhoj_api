@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"github.com/ecnuvj/vhoj_api/auth"
 	"github.com/ecnuvj/vhoj_api/model/contract"
 	"github.com/ecnuvj/vhoj_api/model/entity"
 	"github.com/ecnuvj/vhoj_api/service"
@@ -28,8 +29,16 @@ func CreateContest(c *gin.Context) {
 		})
 		return
 	}
-	//todo real userid
-	user, err := service.UserService.GetUserById(9)
+	token, _ := c.Get("auth")
+	userId, err := util.StringToNumber(token.(*auth.Claims).UserId)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, &contract.CreateContestResponse{
+			BaseResponse: util.NewFailureResponse("unauthorized"),
+		})
+		return
+	}
+
+	user, err := service.UserService.GetUserById(uint(userId))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, &contract.CreateContestResponse{
 			BaseResponse: util.NewFailureResponse("find creator error: %v", err),
@@ -43,7 +52,7 @@ func CreateContest(c *gin.Context) {
 		StartTime:   time.Unix(request.StartTime, 0),
 		EndTime:     time.Unix(request.EndTime, 0),
 		Creator:     user,
-		ProblemIds:  request.ProblemIds,
+		Problems:    request.Problems,
 	}
 	retContest, err := service.ContestService.CreateContest(contest)
 	if err != nil {
@@ -164,7 +173,7 @@ func JoinContest(c *gin.Context) {
 // @Router /contest/show [get]
 func ShowContest(c *gin.Context) {
 	request := &contract.ShowContestRequest{}
-	if err := c.ShouldBindJSON(request); err != nil {
+	if err := c.ShouldBindQuery(request); err != nil {
 		c.JSON(http.StatusBadRequest, &contract.ShowContestResponse{
 			BaseResponse: util.NewFailureResponse("param error: %v", err),
 		})
@@ -394,4 +403,60 @@ func ContestRank(c *gin.Context) {
 		})
 		return
 	}
+	contestId, err := util.StringToNumber(request.ContestId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, &contract.ContestRankResponse{
+			BaseResponse: util.NewFailureResponse("param error: %v", err),
+		})
+		return
+	}
+	rank, err := service.ContestService.ContestRank(uint(contestId))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, &contract.ContestRankResponse{
+			BaseResponse: util.NewFailureResponse("service error: %v", err),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, &contract.ContestRankResponse{
+		Rank:         rank,
+		BaseResponse: util.NewSuccessResponse("success"),
+	})
+}
+
+// @Tags contest
+// @Summary 比赛题目更新
+// @Description 比赛题目更新
+// @Accept  json
+// @Produce json
+// @Param Authorization header string true "Authentication Token"
+// @Param   request body contract.UpdateContestProblemsRequest true "request"
+// @Success 200 {object} contract.UpdateContestProblemsResponse
+// @Failure 400 {object} contract.UpdateContestProblemsResponse
+// @Router /contest/problems/update [post]
+func UpdateContestProblems(c *gin.Context) {
+	request := &contract.UpdateContestProblemsRequest{}
+	if err := c.ShouldBindJSON(request); err != nil {
+		c.JSON(http.StatusBadRequest, &contract.UpdateContestProblemsResponse{
+			BaseResponse: util.NewFailureResponse("param error: %v", err),
+		})
+		return
+	}
+	contestId, err := util.StringToNumber(request.ContestId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, &contract.UpdateContestProblemsResponse{
+			BaseResponse: util.NewFailureResponse("param error: %v", err),
+		})
+		return
+	}
+	problems, err := service.ContestService.UpdateContestProblems(uint(contestId), request.Problems)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, &contract.UpdateContestProblemsResponse{
+			BaseResponse: util.NewFailureResponse("service error: %v", err),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, &contract.UpdateContestProblemsResponse{
+		Problems:     problems,
+		BaseResponse: util.NewSuccessResponse("success"),
+	})
 }

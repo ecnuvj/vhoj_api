@@ -7,7 +7,7 @@ import (
 	"github.com/ecnuvj/vhoj_rpc/model/submitterpb"
 )
 
-func RpcSubmissionToEntitySubmission(submission *submitterpb.Submission) *entity.Submission {
+func RpcSubmissionToEntitySubmission(submission *submitterpb.Submission, withCode bool) *entity.Submission {
 	if submission == nil {
 		return &entity.Submission{}
 	}
@@ -19,7 +19,7 @@ func RpcSubmissionToEntitySubmission(submission *submitterpb.Submission) *entity
 		Code: language.Language(submission.Language),
 		Text: language.CodeToTextMap[language.Language(submission.Language)],
 	}
-	return &entity.Submission{
+	retSubmission := &entity.Submission{
 		SubmissionId: uint(submission.SubmissionId),
 		Username:     submission.Username,
 		ProblemId:    uint(submission.ProblemId),
@@ -30,12 +30,16 @@ func RpcSubmissionToEntitySubmission(submission *submitterpb.Submission) *entity
 		Language:     lang,
 		SubmitTime:   submission.SubmitTime.AsTime(),
 	}
+	if withCode {
+		retSubmission.Code = submission.Code
+	}
+	return retSubmission
 }
 
-func RpcSubmissionsToEntitySubmissions(submissions []*submitterpb.Submission) []*entity.Submission {
+func RpcSubmissionsToEntitySubmissions(submissions []*submitterpb.Submission, withCode bool) []*entity.Submission {
 	retSubmissions := make([]*entity.Submission, len(submissions))
 	for i, s := range submissions {
-		retSubmissions[i] = RpcSubmissionToEntitySubmission(s)
+		retSubmissions[i] = RpcSubmissionToEntitySubmission(s, withCode)
 	}
 	return retSubmissions
 }

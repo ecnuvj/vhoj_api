@@ -49,10 +49,10 @@ type CheckSubmissionStatusResponse struct {
 }
 
 type ShowSubmissionCodeRequest struct {
-	SubmissionId uint `json:"submission_id" form:"submission_id" binding:"required"`
+	SubmissionId string `json:"submission_id" form:"submission_id" binding:"required"`
 }
 
 type ShowSubmissionCodeResponse struct {
-	SubmissionCode string        `json:"submission_code"`
-	BaseResponse   *BaseResponse `json:"base_response"`
+	Submission   *entity.Submission `json:"submission"`
+	BaseResponse *BaseResponse      `json:"base_response"`
 }

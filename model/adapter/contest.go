@@ -48,15 +48,16 @@ func RpcContestToEntityContest(contest *problempb.Contest) *entity.Contest {
 		status = contest_status.RUNNING
 	}
 	return &entity.Contest{
-		ContestId:   uint(contest.ContestId),
-		Title:       contest.Title,
-		Description: contest.Description,
-		StartTime:   contest.StartTime.AsTime(),
-		EndTime:     contest.EndTime.AsTime(),
-		Creator:     RpcUserToEntityUser(contest.Creator),
-		ProblemIds:  problemIds,
-		Problems:    RpcProblemsToEntityProblems(contest.Problems),
-		Status:      status,
+		ContestId:    uint(contest.ContestId),
+		Title:        contest.Title,
+		Description:  contest.Description,
+		StartTime:    contest.StartTime.AsTime(),
+		EndTime:      contest.EndTime.AsTime(),
+		Creator:      RpcUserToEntityUser(contest.Creator),
+		ProblemIds:   problemIds,
+		Problems:     RpcContestProblemsToEntityContestProblems(contest.Problems),
+		Status:       status,
+		ProblemCount: len(problemIds),
 	}
 }
 

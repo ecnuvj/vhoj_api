@@ -23,6 +23,7 @@ type IContestService interface {
 	DeleteContestAdmin(uint, uint) error
 	GenerateParticipants(uint, int32) ([]*entity.User, error)
 	ContestRank(uint) (*entity.Rank, error)
+	UpdateContestProblems(uint, []*entity.ContestProblem) ([]*entity.ContestProblem, error)
 }
 
 var ContestService IContestService = &ContestServiceImpl{}
@@ -31,7 +32,8 @@ type ContestServiceImpl struct{}
 
 func (c *ContestServiceImpl) CreateContest(contest *entity.Contest) (*entity.Contest, error) {
 	request := &problempb.CreateContestRequest{
-		Contest: adapter.EntityContestToRpcContest(contest),
+		Contest:         adapter.EntityContestToRpcContest(contest),
+		ContestProblems: adapter.EntityContestProblemsToRpcContestProblems(contest.Problems),
 	}
 	resp, err := rpc_problem.ProblemServiceClient.CreateContest(context.Background(), request)
 	if err != nil {
@@ -201,7 +203,35 @@ func (c *ContestServiceImpl) GenerateParticipants(contestId uint, count int32) (
 	return adapter.RpcUsersToEntityUsers(resp.Users), nil
 }
 
-func (c *ContestServiceImpl) ContestRank(u uint) (*entity.Rank, error) {
-	//todo
-	panic("implement me")
+func (c *ContestServiceImpl) ContestRank(contestId uint) (*entity.Rank, error) {
+	//submitterResp, err := rpc_submitter.SubmitServiceClient.GetContestSubmissions(context.Background(), &submitterpb.GetContestSubmissionsRequest{
+	//	ContestId: uint64(contestId),
+	//})
+	//if err != nil {
+	//	return nil, err
+	//}
+	//submissions := adapter.RpcSubmissionsToEntitySubmissions(submitterResp.Submissions, false)
+	//problemResp, err := rpc_problem.ProblemServiceClient.GetContestProblems(context.Background(), &problempb.GetContestProblemsRequest{
+	//	ContestId: uint64(contestId),
+	//})
+	//if err != nil {
+	//	return nil, err
+	//}
+	//problems := adapter.
+	panic("no")
+}
+
+func (c *ContestServiceImpl) UpdateContestProblems(contestId uint, problems []*entity.ContestProblem) ([]*entity.ContestProblem, error) {
+	request := &problempb.UpdateContestProblemsRequest{
+		ContestId:       uint64(contestId),
+		ContestProblems: adapter.EntityContestProblemsToRpcContestProblems(problems),
+	}
+	resp, err := rpc_problem.ProblemServiceClient.UpdateContestProblems(context.Background(), request)
+	if err != nil {
+		return nil, err
+	}
+	if resp.BaseResponse.Status != base.REPLY_STATUS_SUCCESS {
+		return nil, fmt.Errorf("resp error: %v", resp.BaseResponse.Message)
+	}
+	return adapter.RpcContestProblemsToEntityContestProblems(resp.ContestProblems), nil
 }

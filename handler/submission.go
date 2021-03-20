@@ -7,6 +7,7 @@ import (
 	"github.com/ecnuvj/vhoj_api/service"
 	"github.com/ecnuvj/vhoj_api/util"
 	"github.com/ecnuvj/vhoj_common/pkg/common/constants/language"
+	"github.com/ecnuvj/vhoj_common/pkg/common/constants/role"
 	"github.com/ecnuvj/vhoj_common/pkg/common/constants/status_type"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -175,16 +176,6 @@ func ListSubmissions(c *gin.Context) {
 	})
 }
 
-func CheckSubmissionStatus(c *gin.Context) {
-	request := &contract.CheckSubmissionStatusRequest{}
-	if err := c.ShouldBindJSON(request); err != nil {
-		c.JSON(http.StatusBadRequest, &contract.CheckSubmissionStatusResponse{
-			BaseResponse: util.NewFailureResponse("request param error, err: %v", err),
-		})
-		return
-	}
-}
-
 // @Tags status
 // @Summary 查看代码
 // @Description 查看代码
@@ -194,7 +185,7 @@ func CheckSubmissionStatus(c *gin.Context) {
 // @Param   request body contract.ShowSubmissionCodeRequest true "request"
 // @Success 200 {object} contract.ShowSubmissionCodeResponse
 // @Failure 400 {object} contract.ShowSubmissionCodeResponse
-// @Router /status/list [post]
+// @Router /status/showCode [post]
 func ShowSubmissionCode(c *gin.Context) {
 	//todo 检查权限
 	request := &contract.ShowSubmissionCodeRequest{}
@@ -204,15 +195,48 @@ func ShowSubmissionCode(c *gin.Context) {
 		})
 		return
 	}
-	code, err := service.SubmitService.GetSubmissionCode(request.SubmissionId)
+	submissionId, err := util.StringToNumber(request.SubmissionId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, &contract.ShowSubmissionCodeResponse{
+			BaseResponse: util.NewFailureResponse("request param error, err: %v", err),
+		})
+		return
+	}
+	submission, err := service.SubmitService.GetSubmission(uint(submissionId))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, &contract.ShowSubmissionCodeResponse{
 			BaseResponse: util.NewFailureResponse("service error: %v", err),
 		})
 		return
 	}
-	c.JSON(http.StatusOK, &contract.ShowSubmissionCodeResponse{
-		SubmissionCode: code,
-		BaseResponse:   util.NewSuccessResponse("success"),
-	})
+	token, exist := c.Get("auth")
+	if !exist {
+		c.JSON(http.StatusUnauthorized, &contract.ShowSubmissionCodeResponse{
+			BaseResponse: util.NewFailureResponse("auth token not exist"),
+		})
+		return
+	}
+	user := token.(*auth.Claims)
+	userId, _ := util.StringToNumber(user.UserId)
+	var ok = true
+	if userId != int(submission.UserId) {
+		ok = false
+		for _, r := range user.Roles {
+			if r == role.CODE_REVIEWER || r == role.ADMIN_USER {
+				ok = true
+				break
+			}
+		}
+	}
+	if ok {
+		c.JSON(http.StatusOK, &contract.ShowSubmissionCodeResponse{
+			Submission:   submission,
+			BaseResponse: util.NewSuccessResponse("success"),
+		})
+	} else {
+		c.JSON(http.StatusForbidden, &contract.ShowSubmissionCodeResponse{
+			BaseResponse: util.NewFailureResponse("forbidden"),
+		})
+	}
+
 }
