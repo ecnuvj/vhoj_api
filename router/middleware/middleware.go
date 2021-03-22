@@ -23,7 +23,24 @@ func Cors() gin.HandlerFunc {
 	}
 }
 
-//todo try auth
+//有token就加 没有也放过 用于用户状态检查 如题目是否通过等
+func TryAuth() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		token := c.GetHeader("Authorization")
+		if token == "" {
+			c.Next()
+			return
+		}
+		claims, err := auth.ParseToken(token)
+		if err != nil {
+			c.Next()
+			return
+		}
+		c.Set("auth", claims)
+		c.Next()
+	}
+}
+
 func Auth() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		token := c.GetHeader("Authorization")

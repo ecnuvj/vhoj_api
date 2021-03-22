@@ -149,7 +149,15 @@ func JoinContest(c *gin.Context) {
 		})
 		return
 	}
-	err := service.ContestService.JoinContest(request.ContestId, request.UserId)
+	token, exist := c.Get("auth")
+	if !exist {
+		c.JSON(http.StatusUnauthorized, &contract.JoinContestResponse{
+			BaseResponse: util.NewFailureResponse(""),
+		})
+		return
+	}
+	userId, _ := util.StringToNumber(token.(*auth.Claims).UserId)
+	err := service.ContestService.JoinContest(request.ContestId, uint(userId))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, &contract.JoinContestResponse{
 			BaseResponse: util.NewFailureResponse("service error: %v", err),
@@ -186,8 +194,23 @@ func ShowContest(c *gin.Context) {
 		})
 		return
 	}
+	token, exist := c.Get("auth")
+	var joined bool
+	if exist {
+		userId, err := util.StringToNumber(token.(*auth.Claims).UserId)
+		if err == nil {
+			users, _ := service.ContestService.GetContestParticipants(request.ContestId)
+			for _, u := range users {
+				if u.UserId == uint(userId) {
+					joined = true
+					break
+				}
+			}
+		}
+	}
 	c.JSON(http.StatusOK, &contract.ShowContestResponse{
 		Contest:      contest,
+		Joined:       joined,
 		BaseResponse: util.NewSuccessResponse("success"),
 	})
 }
@@ -403,14 +426,15 @@ func ContestRank(c *gin.Context) {
 		})
 		return
 	}
-	contestId, err := util.StringToNumber(request.ContestId)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, &contract.ContestRankResponse{
-			BaseResponse: util.NewFailureResponse("param error: %v", err),
-		})
-		return
-	}
-	rank, err := service.ContestService.ContestRank(uint(contestId))
+	//contestId, err := util.StringToNumber(request.ContestId)
+	//if err != nil {
+	//	c.JSON(http.StatusBadRequest, &contract.ContestRankResponse{
+	//		BaseResponse: util.NewFailureResponse("param error: %v", err),
+	//	})
+	//	return
+	//}
+	startTime := time.Unix(request.StartTime, 0)
+	rank, err := service.ContestService.ContestRank(request.ContestId, startTime)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, &contract.ContestRankResponse{
 			BaseResponse: util.NewFailureResponse("service error: %v", err),
@@ -441,14 +465,7 @@ func UpdateContestProblems(c *gin.Context) {
 		})
 		return
 	}
-	contestId, err := util.StringToNumber(request.ContestId)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, &contract.UpdateContestProblemsResponse{
-			BaseResponse: util.NewFailureResponse("param error: %v", err),
-		})
-		return
-	}
-	problems, err := service.ContestService.UpdateContestProblems(uint(contestId), request.Problems)
+	problems, err := service.ContestService.UpdateContestProblems(request.ContestId, request.Problems)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, &contract.UpdateContestProblemsResponse{
 			BaseResponse: util.NewFailureResponse("service error: %v", err),
@@ -481,6 +498,27 @@ func GetUserContests(c *gin.Context) {
 	c.JSON(http.StatusOK, &contract.GetUserContestsResponse{
 		Contests:     contests,
 		PageInfo:     pageInfo,
+		BaseResponse: util.NewSuccessResponse("success"),
+	})
+}
+
+func GetContestParticipants(c *gin.Context) {
+	request := &contract.GetContestParticipantsRequest{}
+	if err := c.ShouldBindJSON(request); err != nil {
+		c.JSON(http.StatusBadRequest, &contract.GetContestParticipantsResponse{
+			BaseResponse: util.NewFailureResponse("param error: %v", err),
+		})
+		return
+	}
+	users, err := service.ContestService.GetContestParticipants(request.ContestId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, &contract.GetContestParticipantsResponse{
+			BaseResponse: util.NewFailureResponse("service error: %v", err),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, &contract.GetContestParticipantsResponse{
+		Users:        users,
 		BaseResponse: util.NewSuccessResponse("success"),
 	})
 }

@@ -38,7 +38,7 @@ func (u *UserServiceImpl) Login(username string, password string) (*entity.User,
 	if resp.BaseResponse.Status != base.REPLY_STATUS_SUCCESS {
 		return nil, fmt.Errorf("resp error: %v", err)
 	}
-	return adapter.RpcUserToEntityUser(resp.User), nil
+	return adapter.RpcUserToEntityUser(resp.User, false), nil
 }
 
 func (u *UserServiceImpl) Register(user *entity.RegisterUserInfo) (*entity.User, error) {
@@ -57,7 +57,7 @@ func (u *UserServiceImpl) Register(user *entity.RegisterUserInfo) (*entity.User,
 	if resp.BaseResponse.Status != base.REPLY_STATUS_SUCCESS {
 		return nil, fmt.Errorf("resp error: %v", resp.BaseResponse.Message)
 	}
-	return adapter.RpcUserToEntityUser(resp.User), nil
+	return adapter.RpcUserToEntityUser(resp.User, false), nil
 }
 
 //user id must have
@@ -73,7 +73,7 @@ func (u *UserServiceImpl) UpdateUserInfo(userId uint, user *entity.User) (*entit
 	if resp.BaseResponse.Status != base.REPLY_STATUS_SUCCESS {
 		return nil, fmt.Errorf("resp error: %v", resp.BaseResponse.Message)
 	}
-	return adapter.RpcUserToEntityUser(resp.User), nil
+	return adapter.RpcUserToEntityUser(resp.User, false), nil
 }
 
 func (u *UserServiceImpl) AuthUser(userId uint, roles []*entity.Role) (*entity.User, error) {
@@ -88,7 +88,7 @@ func (u *UserServiceImpl) AuthUser(userId uint, roles []*entity.Role) (*entity.U
 	if resp.BaseResponse.Status != base.REPLY_STATUS_SUCCESS {
 		return nil, fmt.Errorf("resp error: %v", resp.BaseResponse.Message)
 	}
-	return adapter.RpcUserToEntityUser(resp.User), nil
+	return adapter.RpcUserToEntityUser(resp.User, false), nil
 }
 
 func (u *UserServiceImpl) ListUsers(pageNo int32, pageSize int32) ([]*entity.User, *entity.Page, error) {
@@ -103,7 +103,7 @@ func (u *UserServiceImpl) ListUsers(pageNo int32, pageSize int32) ([]*entity.Use
 	if resp.BaseResponse.Status != base.REPLY_STATUS_SUCCESS {
 		return nil, nil, fmt.Errorf("resp error: %v", resp.BaseResponse.Message)
 	}
-	return adapter.RpcUsersToEntityUsers(resp.Users), &entity.Page{
+	return adapter.RpcUsersToEntityUsers(resp.Users, false), &entity.Page{
 		TotalCount: resp.TotalCount,
 		TotalPages: resp.TotalPages,
 	}, nil
@@ -134,7 +134,7 @@ func (u *UserServiceImpl) GetUserById(userId uint) (*entity.User, error) {
 	if resp.BaseResponse.Status != base.REPLY_STATUS_SUCCESS {
 		return nil, fmt.Errorf("resp error: %v", resp.BaseResponse.Message)
 	}
-	return adapter.RpcUserToEntityUser(resp.User), nil
+	return adapter.RpcUserToEntityUser(resp.User, false), nil
 }
 
 func (u *UserServiceImpl) GetUserByUsername(username string) (*entity.User, error) {
@@ -148,7 +148,7 @@ func (u *UserServiceImpl) GetUserByUsername(username string) (*entity.User, erro
 	if resp.BaseResponse.Status != base.REPLY_STATUS_SUCCESS {
 		return nil, fmt.Errorf("resp error: %v", resp.BaseResponse.Message)
 	}
-	return adapter.RpcUserToEntityUser(resp.User), nil
+	return adapter.RpcUserToEntityUser(resp.User, false), nil
 }
 
 func (u *UserServiceImpl) GetRoleList() ([]*entity.Role, error) {

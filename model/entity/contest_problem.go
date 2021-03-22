@@ -11,3 +11,17 @@ type ContestProblem struct {
 	Submitted    uint                                  `json:"submitted" form:"submitted"`
 	Status       user_problem_status.UserProblemStatus `json:"status" form:"status"`
 }
+
+type ContestProblems []*ContestProblem
+
+func (c ContestProblems) Len() int {
+	return len(c)
+}
+
+func (c ContestProblems) Less(i, j int) bool {
+	return c[i].ProblemOrder < c[j].ProblemOrder
+}
+
+func (c ContestProblems) Swap(i, j int) {
+	c[i], c[j] = c[j], c[i]
+}

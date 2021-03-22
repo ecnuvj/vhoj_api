@@ -5,10 +5,13 @@ import (
 	"github.com/ecnuvj/vhoj_rpc/model/userpb"
 )
 
-//no password
-func RpcUserToEntityUser(user *userpb.User) *entity.User {
+func RpcUserToEntityUser(user *userpb.User, withPass bool) *entity.User {
 	if user == nil {
 		return &entity.User{}
+	}
+	var password string
+	if withPass {
+		password = user.Password
 	}
 	return &entity.User{
 		UserId:     uint(user.UserId),
@@ -16,10 +19,10 @@ func RpcUserToEntityUser(user *userpb.User) *entity.User {
 		Email:      user.Email,
 		School:     user.School,
 		UserAuthId: uint(user.UserAuthId),
-		//Password:   user.Password,
-		Roles:     RpcRolesToEntityRoles(user.Roles),
-		Accepted:  user.Accepted,
-		Submitted: user.Submitted,
+		Password:   password,
+		Roles:      RpcRolesToEntityRoles(user.Roles),
+		Accepted:   user.Accepted,
+		Submitted:  user.Submitted,
 	}
 }
 
@@ -40,10 +43,10 @@ func EntityUserToRpcUser(user *entity.User) *userpb.User {
 	}
 }
 
-func RpcUsersToEntityUsers(users []*userpb.User) []*entity.User {
+func RpcUsersToEntityUsers(users []*userpb.User, withPass bool) []*entity.User {
 	retUsers := make([]*entity.User, len(users))
 	for i, u := range users {
-		retUsers[i] = RpcUserToEntityUser(u)
+		retUsers[i] = RpcUserToEntityUser(u, withPass)
 	}
 	return retUsers
 }

@@ -53,11 +53,11 @@ func RpcContestToEntityContest(contest *problempb.Contest) *entity.Contest {
 		Description:  contest.Description,
 		StartTime:    contest.StartTime.AsTime(),
 		EndTime:      contest.EndTime.AsTime(),
-		Creator:      RpcUserToEntityUser(contest.Creator),
+		Creator:      RpcUserToEntityUser(contest.Creator, false),
 		ProblemIds:   problemIds,
 		Problems:     RpcContestProblemsToEntityContestProblems(contest.Problems),
 		Status:       status,
-		ProblemCount: len(contest.Problems),
+		ProblemCount: len(contest.ProblemIds),
 	}
 }
 

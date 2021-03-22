@@ -28,3 +28,11 @@ type SubmissionLanguage struct {
 	Code language.Language `json:"code"`
 	Text string            `json:"text"`
 }
+
+type Submissions []*Submission
+
+func (s Submissions) Len() int { return len(s) }
+
+func (s Submissions) Less(i, j int) bool { return s[i].SubmitTime.Before(s[j].SubmitTime) }
+
+func (s Submissions) Swap(i, j int) { s[i], s[j] = s[j], s[i] }

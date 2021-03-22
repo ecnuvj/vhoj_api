@@ -59,7 +59,6 @@ type DeleteContestProblemResponse struct {
 }
 
 type JoinContestRequest struct {
-	UserId    uint `json:"user_id" form:"user_id" binding:"required"`
 	ContestId uint `json:"contest_id" form:"contest_id" binding:"required"`
 }
 
@@ -73,6 +72,7 @@ type ShowContestRequest struct {
 
 type ShowContestResponse struct {
 	Contest      *entity.Contest `json:"contest"`
+	Joined       bool            `json:"joined"`
 	BaseResponse *BaseResponse   `json:"base_response"`
 }
 
@@ -118,7 +118,8 @@ type GenerateParticipantsResponse struct {
 }
 
 type ContestRankRequest struct {
-	ContestId string `json:"contest_id" form:"contest_id" binding:"required"`
+	ContestId uint  `json:"contest_id" form:"contest_id" binding:"required"`
+	StartTime int64 `json:"start_time" form:"start_time" binding:"required"`
 }
 
 type ContestRankResponse struct {
@@ -127,7 +128,7 @@ type ContestRankResponse struct {
 }
 
 type UpdateContestProblemsRequest struct {
-	ContestId string                   `json:"contest_id" form:"contest_id" binding:"required"`
+	ContestId uint                     `json:"contest_id" form:"contest_id" binding:"required"`
 	Problems  []*entity.ContestProblem `json:"problems" form:"problems" binding:"required"`
 }
 
@@ -145,4 +146,13 @@ type GetUserContestsResponse struct {
 	Contests     []*entity.Contest `json:"contests" form:"contests"`
 	PageInfo     *entity.Page      `json:"page_info"`
 	BaseResponse *BaseResponse     `json:"base_response"`
+}
+
+type GetContestParticipantsRequest struct {
+	ContestId uint `json:"contest_id" form:"contest_id" binding:"required"`
+}
+
+type GetContestParticipantsResponse struct {
+	Users        []*entity.User `json:"users"`
+	BaseResponse *BaseResponse  `json:"base_response"`
 }
