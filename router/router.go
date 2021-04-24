@@ -35,8 +35,7 @@ func Init() {
 
 	contest := router.Group("/contest")
 	{
-		//todo create contest auth
-		contest.POST("/create", middleware.Auth(), handler.CreateContest)
+		contest.POST("/create", middleware.Auth(), middleware.RoleCheck("creator"), handler.CreateContest)
 		contest.GET("/list", handler.ListContests)
 		contest.GET("/show", middleware.TryAuth(), handler.ShowContest)
 		contest.POST("/search", handler.SearchContest)

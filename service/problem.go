@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/ecnuvj/vhoj_api/model/adapter"
 	"github.com/ecnuvj/vhoj_api/model/entity"
+	"github.com/ecnuvj/vhoj_api/util"
 	"github.com/ecnuvj/vhoj_common/pkg/common/constants/user_problem_status"
 	"github.com/ecnuvj/vhoj_rpc/client/rpc_problem"
 	"github.com/ecnuvj/vhoj_rpc/client/rpc_submitter"
@@ -18,6 +19,7 @@ type IProblemService interface {
 	ShowProblem(uint) (*entity.Problem, error)
 	SearchProblem(int32, int32, *entity.ProblemSearchCondition) ([]*entity.Problem, *entity.Page, error)
 	CheckUserProblemsStatus(problems []*entity.Problem, userId uint, contestId uint) ([]*entity.Problem, error)
+	CheckUserContestProblemsStatus(problems []*entity.ContestProblem, userId uint, contestId uint) ([]*entity.ContestProblem, error)
 }
 
 var ProblemService IProblemService = &ProblemServiceImpl{}
@@ -79,6 +81,14 @@ func (p *ProblemServiceImpl) SearchProblem(pageNo int32, pageSize int32, conditi
 func (p *ProblemServiceImpl) CheckUserProblemsStatus(problems []*entity.Problem, userId uint, contestId uint) ([]*entity.Problem, error) {
 	for _, p := range problems {
 		p.Status, _ = checkUserProblemStatus(userId, p.ProblemId, contestId)
+	}
+	return problems, nil
+}
+
+func (p *ProblemServiceImpl) CheckUserContestProblemsStatus(problems []*entity.ContestProblem, userId uint, contestId uint) ([]*entity.ContestProblem, error) {
+	for _, p := range problems {
+		problemId, _ := util.StringToNumber(p.ProblemId)
+		p.Status, _ = checkUserProblemStatus(userId, uint(problemId), contestId)
 	}
 	return problems, nil
 }

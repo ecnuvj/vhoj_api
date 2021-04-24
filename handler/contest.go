@@ -207,6 +207,7 @@ func ShowContest(c *gin.Context) {
 				}
 			}
 		}
+		contest.Problems, _ = service.ProblemService.CheckUserContestProblemsStatus(contest.Problems, uint(userId), request.ContestId)
 	}
 	c.JSON(http.StatusOK, &contract.ShowContestResponse{
 		Contest:      contest,
