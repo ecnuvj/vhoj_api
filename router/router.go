@@ -31,6 +31,7 @@ func Init() {
 		problem.GET("/show", handler.ShowProblem)
 		problem.POST("/submit", middleware.Auth(), handler.SubmitCode)
 		problem.POST("/search", middleware.TryAuth(), handler.SearchProblem)
+		problem.GET("/rand", handler.RandProblem)
 	}
 
 	contest := router.Group("/contest")

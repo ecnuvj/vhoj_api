@@ -20,6 +20,7 @@ type IProblemService interface {
 	SearchProblem(int32, int32, *entity.ProblemSearchCondition) ([]*entity.Problem, *entity.Page, error)
 	CheckUserProblemsStatus(problems []*entity.Problem, userId uint, contestId uint) ([]*entity.Problem, error)
 	CheckUserContestProblemsStatus(problems []*entity.ContestProblem, userId uint, contestId uint) ([]*entity.ContestProblem, error)
+	RandProblem() (uint, error)
 }
 
 var ProblemService IProblemService = &ProblemServiceImpl{}
@@ -107,4 +108,12 @@ func checkUserProblemStatus(userId uint, problemId uint, contestId uint) (user_p
 		return user_problem_status.UNKNOWN, fmt.Errorf("resp error: %v", resp.BaseResponse.Message)
 	}
 	return user_problem_status.UserProblemStatus(resp.Status), nil
+}
+
+func (p *ProblemServiceImpl) RandProblem() (uint, error) {
+	resp, err := rpc_problem.ProblemServiceClient.RandProblem(context.Background(), &problempb.RandProblemRequest{})
+	if err != nil {
+		return 0, err
+	}
+	return uint(resp.ProblemId), nil
 }

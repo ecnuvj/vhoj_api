@@ -126,3 +126,27 @@ func SearchProblem(c *gin.Context) {
 		Problems:     problems,
 	})
 }
+
+// @Tags problem
+// @Summary 随机提米
+// @Description 随机题目
+// @Accept  json
+// @Produce json
+// @Param Authorization header string true "Authentication Token"
+// @Param   request body contract.RandProblemRequest true "request"
+// @Success 200 {object} contract.RandProblemResponse
+// @Failure 400 {object} contract.RandProblemResponse
+// @Router /problem/rand [get]
+func RandProblem(c *gin.Context) {
+	problemId, err := service.ProblemService.RandProblem()
+	if err != nil {
+		c.JSON(http.StatusBadRequest, &contract.RandProblemResponse{
+			BaseResponse: util.NewFailureResponse("service error: %v", err),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, &contract.RandProblemResponse{
+		BaseResponse: util.NewSuccessResponse("success"),
+		ProblemId:    problemId,
+	})
+}

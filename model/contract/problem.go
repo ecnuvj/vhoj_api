@@ -47,3 +47,11 @@ type CheckUserProblemStatusResponse struct {
 	BaseResponse *BaseResponse                         `json:"base_response"`
 	Status       user_problem_status.UserProblemStatus `json:"status"`
 }
+
+type RandProblemRequest struct {
+}
+
+type RandProblemResponse struct {
+	BaseResponse *BaseResponse `json:"base_response"`
+	ProblemId    uint          `json:"problem_id"`
+}
