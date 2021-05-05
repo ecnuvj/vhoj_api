@@ -78,3 +78,31 @@ func EntityContestProblemsToRpcContestProblems(problems []*entity.ContestProblem
 	}
 	return retProblems
 }
+
+func RpcRawProblemsToEntityRawProblems(rawProblems []*problempb.RawProblem) []*entity.RawProblem {
+	problems := make([]*entity.RawProblem, len(rawProblems))
+	for i, p := range rawProblems {
+		problems[i] = &entity.RawProblem{
+			RawProblemId:    p.RawProblemId,
+			Title:           p.Title,
+			Description:     p.Description,
+			SampleInput:     p.SampleInput,
+			SampleOutput:    p.SampleOutput,
+			Input:           p.Input,
+			Output:          p.Output,
+			Hint:            p.Hint,
+			RemoteOj:        p.RemoteOj,
+			RemoteProblemId: p.RemoteProblemId,
+			RemoteSubmitId:  p.RemoteSubmitId,
+			TimeLimit:       p.TimeLimit,
+			MemoryLimit:     p.MemoryLimit,
+			Spj:             p.Spj,
+			Std:             p.Std,
+			Source:          p.Source,
+			GroupId:         p.GroupId,
+			UpdatedAt:       p.UpdatedAt.AsTime(),
+			ProblemId:       p.ProblemId,
+		}
+	}
+	return problems
+}

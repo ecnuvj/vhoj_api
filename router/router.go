@@ -32,6 +32,9 @@ func Init() {
 		problem.POST("/submit", middleware.Auth(), handler.SubmitCode)
 		problem.POST("/search", middleware.TryAuth(), handler.SearchProblem)
 		problem.GET("/rand", handler.RandProblem)
+		problem.POST("/raw", middleware.Auth(), middleware.RoleCheck("admin"), handler.RawProblemList)
+		problem.POST("/crawl", middleware.Auth(), middleware.RoleCheck("admin"), handler.CrawlProblem)
+		problem.GET("/query/:rawId", middleware.Auth(), middleware.RoleCheck("admin"), handler.QueryCrawl)
 	}
 
 	contest := router.Group("/contest")

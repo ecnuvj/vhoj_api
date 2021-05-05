@@ -6,11 +6,14 @@ import (
 	"github.com/ecnuvj/vhoj_api/model/adapter"
 	"github.com/ecnuvj/vhoj_api/model/entity"
 	"github.com/ecnuvj/vhoj_api/util"
+	"github.com/ecnuvj/vhoj_common/pkg/common/constants/remote_oj"
 	"github.com/ecnuvj/vhoj_common/pkg/common/constants/user_problem_status"
 	"github.com/ecnuvj/vhoj_rpc/client/rpc_problem"
+	"github.com/ecnuvj/vhoj_rpc/client/rpc_remote"
 	"github.com/ecnuvj/vhoj_rpc/client/rpc_submitter"
 	"github.com/ecnuvj/vhoj_rpc/model/base"
 	"github.com/ecnuvj/vhoj_rpc/model/problempb"
+	"github.com/ecnuvj/vhoj_rpc/model/remotepb"
 	"github.com/ecnuvj/vhoj_rpc/model/submitterpb"
 )
 
@@ -21,6 +24,9 @@ type IProblemService interface {
 	CheckUserProblemsStatus(problems []*entity.Problem, userId uint, contestId uint) ([]*entity.Problem, error)
 	CheckUserContestProblemsStatus(problems []*entity.ContestProblem, userId uint, contestId uint) ([]*entity.ContestProblem, error)
 	RandProblem() (uint, error)
+	RawProblemList(pageNo int32, pageSize int32) ([]*entity.RawProblem, *entity.Page, error)
+	CrawlProblem(remoteOj remote_oj.RemoteOJ, problemId string) (uint, error)
+	QueryCrawl(rawId uint) (int32, error)
 }
 
 var ProblemService IProblemService = &ProblemServiceImpl{}
@@ -116,4 +122,40 @@ func (p *ProblemServiceImpl) RandProblem() (uint, error) {
 		return 0, err
 	}
 	return uint(resp.ProblemId), nil
+}
+
+func (p *ProblemServiceImpl) RawProblemList(pageNo int32, pageSize int32) ([]*entity.RawProblem, *entity.Page, error) {
+	resp, err := rpc_problem.ProblemServiceClient.RawProblemList(context.Background(), &problempb.RawProblemListRequest{
+		PageNo:   pageNo,
+		PageSize: pageSize,
+	})
+	if err != nil {
+		return nil, nil, err
+	}
+	return adapter.RpcRawProblemsToEntityRawProblems(resp.RawProblems), &entity.Page{
+		TotalCount: resp.TotalCount,
+		TotalPages: resp.TotalPages,
+	}, nil
+}
+
+func (p *ProblemServiceImpl) CrawlProblem(remoteOj remote_oj.RemoteOJ, problemId string) (uint, error) {
+	resp, err := rpc_remote.RemoteServiceClient.CrawlProblem(context.Background(), &remotepb.CrawlProblemRequest{
+		RemoteOj:        int32(remoteOj),
+		RemoteProblemId: problemId,
+		Enforce:         true,
+	})
+	if err != nil {
+		return 0, err
+	}
+	return uint(resp.RawProblemId), nil
+}
+
+func (p *ProblemServiceImpl) QueryCrawl(rawId uint) (int32, error) {
+	resp, err := rpc_remote.RemoteServiceClient.QueryCrawlResult(context.Background(), &remotepb.QueryCrawlResultRequest{
+		RawId: uint64(rawId),
+	})
+	if err != nil {
+		return 0, err
+	}
+	return resp.Status, nil
 }

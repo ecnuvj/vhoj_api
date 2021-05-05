@@ -150,3 +150,68 @@ func RandProblem(c *gin.Context) {
 		ProblemId:    problemId,
 	})
 }
+
+func RawProblemList(c *gin.Context) {
+	request := &contract.RawProblemListRequest{}
+	if err := c.ShouldBindJSON(request); err != nil {
+		c.JSON(http.StatusBadRequest, &contract.RawProblemListResponse{
+			BaseResponse: util.NewFailureResponse("param error: %v", err),
+		})
+		return
+	}
+	problems, pageInfo, err := service.ProblemService.RawProblemList(request.PageNo, request.PageSize)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, &contract.RawProblemListResponse{
+			BaseResponse: util.NewFailureResponse("service error: %v", err),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, &contract.RawProblemListResponse{
+		BaseResponse: util.NewSuccessResponse("success"),
+		RawProblems:  problems,
+		PageInfo:     pageInfo,
+	})
+}
+
+func CrawlProblem(c *gin.Context) {
+	request := &contract.CrawlProblemRequest{}
+	if err := c.ShouldBindJSON(request); err != nil {
+		c.JSON(http.StatusBadRequest, &contract.CrawlProblemResponse{
+			BaseResponse: util.NewFailureResponse("param error: %v", err),
+		})
+		return
+	}
+	rawId, err := service.ProblemService.CrawlProblem(request.RemoteOJ, request.RemoteProblemId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, &contract.CrawlProblemResponse{
+			BaseResponse: util.NewFailureResponse("service error: %v", err),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, &contract.CrawlProblemResponse{
+		BaseResponse: util.NewSuccessResponse("success"),
+		RawProblemId: rawId,
+	})
+}
+
+func QueryCrawl(c *gin.Context) {
+	rawIdStr := c.Param("rawId")
+	rawId, err := util.StringToNumber(rawIdStr)
+	if err != nil || rawId <= 0 {
+		c.JSON(http.StatusBadRequest, &contract.QueryCrawlResponse{
+			BaseResponse: util.NewFailureResponse("param error: %v", err),
+		})
+		return
+	}
+	status, err := service.ProblemService.QueryCrawl(uint(rawId))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, &contract.QueryCrawlResponse{
+			BaseResponse: util.NewFailureResponse("service error: %v", err),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, &contract.QueryCrawlResponse{
+		BaseResponse: util.NewSuccessResponse("success"),
+		Status:       status,
+	})
+}
