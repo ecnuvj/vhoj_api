@@ -147,6 +147,12 @@ func (p *ProblemServiceImpl) CrawlProblem(remoteOj remote_oj.RemoteOJ, problemId
 	if err != nil {
 		return 0, err
 	}
+	if resp.BaseResponse == nil {
+		return 0, fmt.Errorf("rpc remote error, no resp")
+	}
+	if resp.BaseResponse.Status != base.REPLY_STATUS_SUCCESS {
+		return 0, fmt.Errorf(resp.BaseResponse.Message)
+	}
 	return uint(resp.RawProblemId), nil
 }
 
@@ -156,6 +162,12 @@ func (p *ProblemServiceImpl) QueryCrawl(rawId uint) (int32, error) {
 	})
 	if err != nil {
 		return 0, err
+	}
+	if resp.BaseResponse == nil {
+		return 0, fmt.Errorf("rpc remote error, no resp")
+	}
+	if resp.BaseResponse.Status != base.REPLY_STATUS_SUCCESS {
+		return 0, fmt.Errorf(resp.BaseResponse.Message)
 	}
 	return resp.Status, nil
 }
